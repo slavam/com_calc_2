@@ -1,0 +1,23 @@
+%div{ class:"center jumbotron"}
+  %h1= "Пользователи"
+  %table{class: "table table-hover"}
+    %thead
+      %tr
+        %th{size: "300px"}= "Логин"
+        %th= "e-mail"
+        %th= "Фамилия"
+        %th= "Имя"
+        %th= "Отчество"
+        %th= ""
+        %th= ""
+    %tbody
+      - @users.each do |user| 
+        %tr
+          %td{margin: "10"}= user.login
+          %td= user.email
+          %td= user.last_name
+          %td= user.first_name
+          %td= user.middle_name
+          %td= link_to 'Изменить', edit_user_path(user.id)
+          %td= link_to 'Удалить', user, method: :delete, data: { confirm: 'Уверены?' }
+  = link_to "Добавить пользователя", new_user_path, class: "btn btn-lg btn-primary"
