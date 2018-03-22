@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   end
   
   def show
-    # debugger
+    @flats = @user.flats
   end
 
   def new
@@ -16,6 +16,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
+      log_in @user
       flash[:success] = "Новый пользователь успешно создан"
       redirect_to @user
     else

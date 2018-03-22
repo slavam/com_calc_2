@@ -1,0 +1,6 @@
+<h1>Пользователь <%= current_user.last_name %></h1> 
+<li id="payer-flat-<%= @flat.id %>">
+  <span class="payer">Плательщик: <%= @flat.payer_lastname %></span>
+  <span class="address">Адрес: <%= link_to @flat.address, @flat %></span>
+  <span class="utilities_link"><%= link_to 'Жилье', current_user %></span>
+</li>

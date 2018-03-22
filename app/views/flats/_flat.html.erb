@@ -1,0 +1,6 @@
+<li id="flat-<%= flat.id %>">
+  <span class="payer">Плательщик: <%= flat.payer_lastname %></span>
+  <span class="address">Адрес: <%= link_to flat.address, flat %></span>
+  <span class="utilities_link"><%= link_to 'Услуги', flat_utilities_path(flat) %></span>
+  <span class="utilities_link"><%= link_to 'Счета', flat_accounts_path(flat) %></span>
+</li>

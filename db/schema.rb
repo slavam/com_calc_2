@@ -10,7 +10,54 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180218065658) do
+ActiveRecord::Schema.define(version: 20180318111608) do
+
+  create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.date "start_date", null: false
+    t.integer "months_number", default: 1
+    t.decimal "total", precision: 10, scale: 2, default: "0.0"
+    t.integer "flat_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name"
+    t.string "description"
+    t.string "unit"
+    t.boolean "is_counter", default: false
+    t.boolean "is_variable_tariff", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "flats", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "user_id"
+    t.string "address"
+    t.string "payer_firstname"
+    t.string "payer_middlename"
+    t.string "payer_lastname"
+    t.float "total_area", limit: 24
+    t.float "heated_area", limit: 24
+    t.integer "residents_number"
+    t.float "lat", limit: 24
+    t.float "lng", limit: 24
+    t.integer "owner_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_flats_on_user_id"
+  end
+
+  create_table "tariffs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "category_id"
+    t.string "name"
+    t.decimal "value", precision: 10, scale: 2, null: false
+    t.date "start_date"
+    t.float "low_edge", limit: 24, default: 0.0
+    t.float "top_edge", limit: 24, default: 0.0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "last_name"
@@ -26,4 +73,17 @@ ActiveRecord::Schema.define(version: 20180218065658) do
     t.index ["login"], name: "index_users_on_login", unique: true
   end
 
+  create_table "utilities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "flat_id", null: false
+    t.integer "category_id", null: false
+    t.integer "tariff_id", null: false
+    t.string "description"
+    t.float "start_value_counter", limit: 24
+    t.float "last_value_counter", limit: 24
+    t.boolean "is_active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "flats", "users"
 end
