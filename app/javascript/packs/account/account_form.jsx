@@ -6,23 +6,46 @@ export default class AccountForm extends React.Component {
     super(props);
     let now = new Date();
     let month = now.getMonth()+1 < 10 ? '0'+(now.getMonth()+1) : now.getMonth()+1;
+    
     this.state = {
+      utilityParams: this.props.utilityParams,
       monthsNumber: 1,
+      total: this.props.total,
       startDate: now.getFullYear()+'-'+month+'-01' 
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.dateChange = this.dateChange.bind(this);
     this.numberChange = this.numberChange.bind(this);
+    this.calcTotal = this.calcTotal.bind(this);
+    this.updateCounterValue = this.updateCounterValue.bind(this);
+  }
+  updateCounterValue(utilityId, newValue, tariff){
+    this.state.utilityParams[utilityId].new_value_counter = +newValue;
+    this.state.utilityParams[utilityId].tariff = tariff;
+    this.calcTotal();
   }
   dateChange(e) {
     let firstDay = e.target.value.substr(0,8)+'01';
     this.setState({startDate: firstDay});
   }
   numberChange(e){
-    this.setState({monthsNumber: e.target.value});
+    this.state.monthsNumber = +e.target.value;
+    this.calcTotal();
   }
   handleSubmit(e){
     e.preventDefault();
+    this.props.onAccountSubmit(this.state);
+  }
+  calcTotal(){
+    let total = 0;
+    this.props.utilityParams.map((up) => {
+      if (up.is_counter){
+        let delta = up.new_value_counter-up.old_value_counter;
+        total += delta*up.tariff;
+      }else
+        total += up.quantity*up.tariff*this.state.monthsNumber;
+    });
+    this.setState({total: total});
   }
   render() {
     return(
@@ -54,15 +77,11 @@ export default class AccountForm extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {
-                this.props.utilities.map((u) => {
-                  let category; 
-                  this.props.categories.some(cat => {category = cat; return cat.id == u.category_id});
-                  let tariff;
-                  this.props.tariffs.some(tar => {tariff = tar; return tar.id == u.tariff_id});
-                  return <AccountLine key={u.id} utility={u} category={category} tariff={tariff} flat={this.props.flat} />;
-                })
-              }
+              {this.props.utilityParams.map((utilityParams, i) => {
+                let tariffLimits= this.props.tariffLimits[utilityParams.category_id];
+                return <AccountLine key={utilityParams.utility_id} utilityParams={utilityParams} utilityId={i} tariffLimits={tariffLimits} flat={this.props.flat} monthsNumber={this.state.monthsNumber} onUtilitySubmit={this.updateCounterValue}/>;
+              })}
+              <tr key="0"><td><b>Итого</b></td><td className="total"><b>{(+this.state.total).toFixed(2)}</b></td></tr>
             </tbody>
           </table>
           <input type="submit" value="Сохранить" />

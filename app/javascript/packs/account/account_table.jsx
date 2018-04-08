@@ -18,7 +18,7 @@ export default class AccountTable extends React.Component {
                 // this.props.categories.some(cat => {category = cat; return cat.id == u.category_id});
                 // let tariff;
                 // this.props.tariffs.some(tar => {tariff = tar; return tar.id == u.tariff_id});
-                return <span className="account" key={a.id}>С {a.start_date} за {a.months_number} мес. начислено {a.total}</span>;
+                return <span className="account" key={a.id}>С {a.start_date} за {a.months_number} мес. начислено {a.total}<br/></span>;
               })
             }
         </li>

@@ -9,7 +9,7 @@ class Utility < ApplicationRecord
         self.flat.total_area
       when 'Газ'
         self.flat.residents_number
-      when 'Отопление'
+      when 'ОТОПЛЕНИЕ'
         self.flat.heated_area.round(2)
     end
   end

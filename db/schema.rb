@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180318111608) do
+ActiveRecord::Schema.define(version: 20180408063113) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.date "start_date", null: false
@@ -46,6 +46,22 @@ ActiveRecord::Schema.define(version: 20180318111608) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_flats_on_user_id"
+  end
+
+  create_table "payments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "account_id"
+    t.bigint "utility_id"
+    t.integer "months_number", default: 1
+    t.decimal "amount", precision: 10, scale: 2, null: false
+    t.float "tariff", limit: 24, null: false
+    t.float "quantity", limit: 24, null: false
+    t.boolean "is_counter", default: false
+    t.float "old_value_counter", limit: 24
+    t.float "new_value_counter", limit: 24
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_payments_on_account_id"
+    t.index ["utility_id"], name: "index_payments_on_utility_id"
   end
 
   create_table "tariffs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -86,4 +102,6 @@ ActiveRecord::Schema.define(version: 20180318111608) do
   end
 
   add_foreign_key "flats", "users"
+  add_foreign_key "payments", "accounts"
+  add_foreign_key "payments", "utilities"
 end
