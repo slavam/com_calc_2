@@ -1,9 +1,19 @@
 class AccountsController < ApplicationController
   before_action :set_flat, only: [:index, :new, :create, :show, :edit, :update, :destroy]
-  before_action :set_utility, only: [:show, :edit, :update, :destroy]
+  before_action :set_account, only: [:show, :edit, :update, :destroy]
+  
+  def show
+    respond_to do |format|
+      format.html
+      format.pdf do
+        pdf = Invoice.new(@flat, @account)
+        send_data pdf.render, filename: "invoice_#{current_user.id}.pdf", type: "application/pdf", disposition: "inline", :force_download=>true, :page_size => "A4"
+      end
+    end
+  end
   
   def index
-    @accounts = @flat.accounts.order(:id)
+    @accounts = @flat.accounts.size > 0 ? @flat.accounts.order(:id).reverse_order : []
     utilities = @flat.utilities.order(:id)
     @tariff_limits = {}
     @utility_params = []
@@ -13,13 +23,14 @@ class AccountsController < ApplicationController
       @utility_params << {
         utility_id: u.id,
         category_id: u.category_id, 
-        category_name: u.category.name,
+        category_name: u.display_name,
         is_counter: u.category.is_counter,
         is_variable_tariff: u.category.is_variable_tariff,
         quantity: u.category.is_counter ? 0 : u.quantity,
         tariff: u.category.is_variable_tariff ? 0 : u.tariff.value.to_f,
         old_value_counter: u.last_value_counter,
-        new_value_counter: u.last_value_counter
+        new_value_counter: u.last_value_counter,
+        description: u.description
       }
       @total += @utility_params[i][:quantity] * @utility_params[i][:tariff] if !u.category.is_counter
       i += 1
@@ -40,6 +51,7 @@ class AccountsController < ApplicationController
         v.delete(:category_name)
         v.delete(:is_variable_tariff)
         p = @account.payments.build(payment_params(v))
+        p.quantity = p[:new_value_counter].to_f-p[:old_value_counter].to_f if p[:is_counter]
         p.amount = p[:tariff].to_f*p[:quantity].to_f*(p[:is_counter] ? 1 : months_number)
         if p.save
           # Rails.logger.debug("My object>>>>>>>>>>>>>>>: #{p.inspect}")
@@ -56,7 +68,7 @@ class AccountsController < ApplicationController
       # }
       # format.html { redirect_to flat_accounts_path, notice: 'Account was successfully created.' }
       # format.json { render :show, status: :created, location: @account }
-      render json: {accounts: @flat.accounts.order(:id)}
+      render json: {accounts: @flat.accounts.order(:id).reverse_order}
     else
       # format.html { render :index }
       format.json { render json: @account.errors, status: :unprocessable_entity }
@@ -65,8 +77,8 @@ class AccountsController < ApplicationController
   
   def destroy
     @account.destroy
-    # flash[:success] = "Услуга удалена"
-    render json: {accounts: @flat.accounts.order(:start_date).reverse_order}
+    flash[:success] = "Счет удален"
+    redirect_to flat_accounts_path #json: {accounts: @flat.accounts.order(:id).reverse_order}
   end
   
   private

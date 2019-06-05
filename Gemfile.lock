@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/straydogstudio/prawn-table.git
+  revision: 759a27b6fef2e682c035fc83f2182e53c3270279
+  ref: 759a27b6
+  specs:
+    prawn-table (0.2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -103,6 +110,10 @@ GEM
     nio4r (2.2.0)
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
+    pdf-core (0.7.0)
+    prawn (2.2.2)
+      pdf-core (~> 0.7.0)
+      ttfunk (~> 1.5)
     public_suffix (3.0.2)
     puma (3.11.2)
     rack (2.0.4)
@@ -169,6 +180,7 @@ GEM
     thor (0.20.0)
     thread_safe (0.3.6)
     tilt (2.0.8)
+    ttfunk (1.5.1)
     turbolinks (5.1.0)
       turbolinks-source (~> 5.1)
     turbolinks-source (5.1.0)
@@ -205,6 +217,8 @@ DEPENDENCIES
   jquery-rails
   listen (>= 3.0.5, < 3.2)
   mysql2 (~> 0.3.11)
+  prawn (~> 2.2.0)
+  prawn-table!
   puma (~> 3.7)
   rails (~> 5.1.4)
   sass-rails (~> 5.0)

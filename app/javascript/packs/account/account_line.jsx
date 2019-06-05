@@ -23,6 +23,7 @@ export default class AccountLine extends React.Component{
   
   render(){
     let sum = this.state.quantity*this.state.tariff*(this.props.utilityParams.is_counter ? 1 : this.props.monthsNumber);
+    // let category = this.props.utilityParams.category_name.toUpperCase() + (this.props.utilityParams.description > '' ? ' ('+this.props.utilityParams.description+')' : '');
     return <tr key={this.props.utilityId}><td>{this.props.utilityParams.category_name}</td>
       <td><b>{sum.toFixed(2)}</b></td>
       <td>{this.state.tariff}</td>

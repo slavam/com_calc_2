@@ -43,7 +43,7 @@ export default class AccountsByFlat extends React.Component {
         <h3>Новый счет</h3>
         <AccountForm total={this.props.total} utilityParams={this.props.utilityParams} flat={this.props.flat} tariffLimits={this.props.tariffLimits} onAccountSubmit={this.createAccount}/>
         <h3>Список счетов</h3>
-        <AccountTable accounts={this.state.accounts} onDeleteAccount={this.handleDeleteAccount}/>
+        <AccountTable flatId={this.props.flatId} accounts={this.state.accounts} onDeleteAccount={this.handleDeleteAccount}/>
       </div>
     );
   }
@@ -54,12 +54,12 @@ document.addEventListener('turbolinks:load', () => {
   const accounts = JSON.parse(node.getAttribute('accounts'));
   const utilityParams = JSON.parse(node.getAttribute('utilityParams'));
   const tariffLimits = JSON.parse(node.getAttribute('tariffLimits'));
-  const flat = JSON.parse(node.getAttribute('flat'));
+  // const flat = JSON.parse(node.getAttribute('flat'));
   const flatId = node.getAttribute('flatId');
   const total = node.getAttribute('total');
 
   ReactDOM.render(
-    <AccountsByFlat flatId={flatId} flat={flat} accounts={accounts} tariffLimits={tariffLimits} utilityParams={utilityParams} total={total}/>,
+    <AccountsByFlat flatId={flatId} accounts={accounts} tariffLimits={tariffLimits} utilityParams={utilityParams} total={total}/>,
     document.getElementById('accounts')
   );
 })

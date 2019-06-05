@@ -4,7 +4,6 @@
       = render 'payer'
   %div{ class:"col-md-8"}
     %h3 Счета
-    - if @flat.accounts.any? 
-      #accounts
-      #accounts_data{flatId: @flat.id.to_json, flat: @flat.to_json, accounts: @accounts.to_json, tariffLimits: @tariff_limits.to_json, utilityParams: @utility_params.to_json, total: @total.to_json}
-      = javascript_pack_tag 'account/accounts_by_flat'
+    #accounts
+    #accounts_data{flatId: @flat.id.to_json, accounts: @accounts.to_json, tariffLimits: @tariff_limits.to_json, utilityParams: @utility_params.to_json, total: @total.to_json}
+    = javascript_pack_tag 'account/accounts_by_flat'

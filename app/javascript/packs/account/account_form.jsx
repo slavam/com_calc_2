@@ -79,7 +79,7 @@ export default class AccountForm extends React.Component {
             <tbody>
               {this.props.utilityParams.map((utilityParams, i) => {
                 let tariffLimits= this.props.tariffLimits[utilityParams.category_id];
-                return <AccountLine key={utilityParams.utility_id} utilityParams={utilityParams} utilityId={i} tariffLimits={tariffLimits} flat={this.props.flat} monthsNumber={this.state.monthsNumber} onUtilitySubmit={this.updateCounterValue}/>;
+                return <AccountLine key={utilityParams.utility_id} utilityParams={utilityParams} utilityId={i} tariffLimits={tariffLimits} monthsNumber={this.state.monthsNumber} onUtilitySubmit={this.updateCounterValue}/>;
               })}
               <tr key="0"><td><b>Итого</b></td><td className="total"><b>{(+this.state.total).toFixed(2)}</b></td></tr>
             </tbody>

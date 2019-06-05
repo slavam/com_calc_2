@@ -36,6 +36,8 @@ gem 'jbuilder', '~> 2.5'
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
+gem 'prawn', '~>2.2.0'
+gem 'prawn-table', :git => 'https://github.com/straydogstudio/prawn-table.git', ref: '759a27b6'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
