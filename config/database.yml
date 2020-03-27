@@ -9,7 +9,7 @@ default: &default
   encoding: utf8
   # username: slavam1
   username: utility-admin
-  # password: 
+#  password: Utility-12345
   password: utility-pw
   host: localhost
   # host: 172.17.0.139
@@ -28,4 +28,5 @@ test:
 
 production:
   <<: *default
+#  password: Utility-12345
   database: utilities_production

@@ -1,38 +1,38 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import SelectCategory from './select_category';
+import Select from 'react-select';
 import TariffTable from './tariff_table';
+import {connect} from 'react-redux';
+import { getCategory } from './redux/actions'
 
-export default class TariffsByCategory extends React.Component {  
+const node = document.getElementById('tariffs_data');
+const categories = JSON.parse(node.getAttribute('categories'));
+
+class TariffsByCategory extends React.Component {
   constructor(props) {
     super(props);
+    this.categories = [];
+    categories.map((c) => {
+      this.categories.push({value: c.id, label: c.name});
+    });
     this.state = {
-      category_id: 1
+      category: {value: categories[0].id, label: categories[0].name}
     };
-    this.handleCategoryChange = this.handleCategoryChange.bind(this);
+    this.handleCategorySelected = this.handleCategorySelected.bind(this);
   }
-  handleCategoryChange(value){
-    this.setState({category_id: +value});
+  handleCategorySelected(value){
+    this.setState({category: value});
+    this.props.getCategory(value.value);
   }
   render() {
     return(
       <div>
         <h3>Категория</h3>
-        <SelectCategory categories={this.props.categories} onCategoryChange={this.handleCategoryChange} />
-        <h3>Тарифы => {this.state.category_id}</h3>
-        <TariffTable tariffs={this.props.tariffs} category_id={this.state.category_id}/>
+        <Select value={this.state.category} onChange={this.handleCategorySelected} options={this.categories}/>
+        <h3>Тарифы</h3>
+        <TariffTable />
       </div>
     );
   }
 }
 
-document.addEventListener('turbolinks:load', () => {
-  const node = document.getElementById('tariffs_data');
-  const tariffs = JSON.parse(node.getAttribute('tariffs'));
-  const categories = JSON.parse(node.getAttribute('categories'));
-
-  ReactDOM.render(
-    <TariffsByCategory tariffs={tariffs} categories={categories} />,
-    document.getElementById('tariffs')
-  );
-})
+export default connect(null, { getCategory })(TariffsByCategory);

@@ -1,12 +1,17 @@
 import React from 'react';
-export default class SelectCategory extends React.Component{
+import { connect } from 'react-redux'
+import { getCategory } from './redux/actions'
+
+class SelectCategory extends React.Component{
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
   }
   handleChange(e) {
+    // console.log("CategoryId=>"+e.target.value);
     e.preventDefault();
-    this.props.onCategoryChange(e.target.value);
+    // this.props.onCategoryChange(e.target.value);
+    this.props.getCategory(e.target.value);
   }
   render() {
     return(
@@ -20,3 +25,12 @@ export default class SelectCategory extends React.Component{
     );
   }
 }
+
+const mapStateToProps = state => {
+  return { categoryId: state.categoryId };
+};
+
+export default connect(
+  mapStateToProps,
+  { getCategory }
+)(SelectCategory)
