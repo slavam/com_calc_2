@@ -1,4 +1,4 @@
-import { GET_CATEGORY, ALL_CATEGORIES, ALL_TARIFFS } from './actionTypes'
+import { GET_CATEGORY, ALL_CATEGORIES, ALL_TARIFFS, UTILITIES_BY_FLAT } from './actionTypes'
 
 export const getCategory = categoryId => ({
   type: GET_CATEGORY,
@@ -15,6 +15,10 @@ export const allTariffs = tariffs => ({
   payload: {tariffs}
 })
 
+export const getUtilities = utilities => ({
+  type: UTILITIES_BY_FLAT,
+  payload: {utilities}
+})
 // export const getTariffsByCat = tariffs => ({
 //   type: TARIFFS_BY_CAT,
 //   payload: {tariffsByCat: tariffs}
