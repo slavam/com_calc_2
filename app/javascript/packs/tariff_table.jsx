@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux";
-import { getCategory } from './redux/actions'
+
 const TariffTable = ({ tariffs, categoryId }) => (
   <div>
     <table className='table table-bordered'>
@@ -22,10 +22,7 @@ const TariffTable = ({ tariffs, categoryId }) => (
     </table>
   </div>
 );
-
 const mapStateToProps = state => {
-  return {categoryId: state.categories.categoryId, tariffs: state.categories.tariffs};
+  return {categoryId: state.tariffs.categoryId, tariffs: state.tariffs.tariffs};
 }
-export default connect(mapStateToProps, {getCategory})(TariffTable);
-
-// export default TariffTable;
+export default connect(mapStateToProps)(TariffTable);

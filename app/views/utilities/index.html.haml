@@ -5,5 +5,8 @@
   %div{ class:"col-md-8"}
     %h3 Услуги
     #utilities
+    #root
     #utilities_data{flatId: @flat.id.to_json, utilities: @utilities.to_json, tariffs: @tariffs.to_json, categories: @categories.to_json}
-    = javascript_pack_tag 'utilities_by_flat'
+    -#= javascript_pack_tag 'utilities_by_flat'
+    -#= javascript_pack_tag 'index'
+    = javascript_pack_tag 'App'

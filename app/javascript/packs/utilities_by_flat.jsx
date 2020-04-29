@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import UtilityForm from './utility_form';
+// import UtilityForm from './utility_form';
 import UtilityTable from './utility_table';
-import { getUtilities } from './redux.actions'
+import { connect } from "react-redux";
+// import { getUtilities } from './redux.actions'
 
-const node = document.getElementById('utilities_data');
-const flatId = JSON.parse(node.getAttribute('flatId'));
+// const node = document.getElementById('utilities_data');
+// const flatId = JSON.parse(node.getAttribute('flatId'));
 
 class UtilitiesByFlat extends React.Component {
   constructor(props) {
@@ -52,7 +53,7 @@ class UtilitiesByFlat extends React.Component {
   }
 }
 
-export default connect(null, {getUtilities})(UtilitiesByFlat);
+export default connect(null)(UtilitiesByFlat);
 
 // document.addEventListener('turbolinks:load', () => {
 //   const node = document.getElementById('utilities_data');

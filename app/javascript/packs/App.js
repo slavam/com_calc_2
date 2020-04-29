@@ -5,6 +5,7 @@ import { ConfigureStore } from './redux/configureStore';
 import { BrowserRouter, Switch, Route, withRouter } from 'react-router-dom';
 import TariffsByCategory from './tariffs_by_category';
 import AccountsByFlat from './account/accounts_by_flat';
+import UtilitiesByFlat from './utilities_by_flat';
 import {connect} from 'react-redux';
 
 const store = ConfigureStore();
@@ -13,15 +14,17 @@ class App extends React.Component{
 
   render() {
     return(
-      <BrowserRouter>
-        <Switch>
-          <Route exact path='/' render={() => ("Tariffs!")} />
-          <Route path='/users/1' render={() => ("<AccountsByFlat flatId='4'/>")} />
-        </Switch>
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Switch>
+            <Route exact path='/tariffs' component={() => <TariffsByCategory />} />
+            <Route path='/flats/:flatId/accounts' component={() => <AccountsByFlat />} />
+            <Route path='/flats/:flatId/utilities' component={() => <UtilitiesByFlat />} />
+          </Switch>
+        </BrowserRouter>
+      </Provider>
     );
   }
 }
-
-export default App;
-ReactDOM.render(<App />, document.getElementById('tariffs'));
+export default withRouter(connect(null)(App));
+ReactDOM.render(<App />, document.getElementById('root'));
