@@ -1,13 +1,13 @@
-%div{ class:"row"}
-  %aside{ class:"col-md-4"}
-    %section{ class:"user_info"}
+.row
+  %aside.col-md-4
+    %section.class#user-info
       = render 'payer'
-  %div{ class:"col-md-8"}
-    %h3= "Счет на оплату коммунальных услуг с #{@account.start_date.to_s} за #{@account.months_number} мес."
-    %div{ class:"row"}
-      %div{ class: "col-md-6 col-md-offset-3"}
-      - if @account.payments.any? 
-        %table{class: "table table-bordered"}
+  .col-md-8
+    %h3 Счет на оплату коммунальных услуг с #{@account.start_date} за #{@account.months_number} мес.
+    %class#row
+      %div{ class: 'col-md-6 col-md-offset-3' }
+      - if @account.payments.any?
+        %table{ class: 'table table-bordered' }
           %thead
             %tr
               %th Услуга
@@ -17,9 +17,9 @@
               %th Стало
               %th Разница
           %tbody
-          -for p in @account.payments
+          - for p in @account.payments
             %tr
-              %td= p.utility.display_name 
+              %td= p.utility.display_name
               %td= p.amount
               %td= p.is_counter ? '' : "#{@account.months_number} мес."
               - if p.is_counter
@@ -31,7 +31,9 @@
               %b Итого
             %td
               %b= @account.total
-        = link_to 'Печатать', flat_account_path(@flat, format: 'pdf')
-    = link_to 'Удалить', flat_account_path, method: :delete, data: { confirm: 'Вы уверены?' }
+    = link_to 'Печатать', flat_account_path(@flat, format: 'pdf')
+    %br
+    = link_to 'Удалить', flat_account_path, method: :delete,
+      data: { confirm: 'Вы уверены?' }
     %br
     = link_to 'Счета', flat_accounts_path(@flat)

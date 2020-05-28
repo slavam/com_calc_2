@@ -11,12 +11,12 @@ import {connect} from 'react-redux';
 const store = ConfigureStore();
 
 class App extends React.Component{
-
   render() {
     return(
       <Provider store={store}>
         <BrowserRouter>
           <Switch>
+            <Route exact path='/' component={() => <TariffsByCategory />} />
             <Route exact path='/tariffs' component={() => <TariffsByCategory />} />
             <Route path='/flats/:flatId/accounts' component={() => <AccountsByFlat />} />
             <Route path='/flats/:flatId/utilities' component={() => <UtilitiesByFlat />} />

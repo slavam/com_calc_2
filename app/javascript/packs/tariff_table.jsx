@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from "react-redux";
 
-const TariffTable = ({ tariffs, categoryId }) => (
+const TariffTable = (props) => (
   <div>
     <table className='table table-bordered'>
       <thead>
@@ -12,9 +12,9 @@ const TariffTable = ({ tariffs, categoryId }) => (
         </tr>
       </thead>
       <tbody>
-        { tariffs && tariffs.length ?
-          tariffs.map( t => {
-            if(t.category_id == categoryId)
+        { props.tariffs && props.tariffs.length ?
+          props.tariffs.map( t => {
+            if(t.category_id == props.categoryId)
               return <tr key={t.id}><td>{t.name}</td><td>{t.value}</td><td>{t.start_date}</td></tr>;
           }) : null
         }

@@ -6,12 +6,19 @@ class TariffsController < ApplicationController
   def index
     @tariffs = Tariff.all.order(:category_id, :name)
     @categories = Category.active_categories #all.order(:name)
+    respond_to do |format|
+      format.html
+      format.json do
+        # render json: @tariffs
+        render json: {tariffs: @tariffs, categories: @categories}
+      end
+    end
   end
-  
+
   def new
     @tariff = Tariff.new
   end
-  
+
   def create
     @tariff = Tariff.new(tariff_params)
 
@@ -25,10 +32,10 @@ class TariffsController < ApplicationController
       end
     end
   end
-  
+
   def edit
   end
-  
+
   def update
     respond_to do |format|
       if @tariff.update(tariff_params)
@@ -40,12 +47,12 @@ class TariffsController < ApplicationController
       end
     end
   end
-  
+
   private
     def set_tariff
       @tariff = Tariff.find(params[:id])
     end
-  
+
     def tariff_params
       params.require(:tariff).permit(:name, :value, :start_date, :category_id, :low_edge, :top_edge)
     end
