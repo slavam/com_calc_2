@@ -17,8 +17,6 @@ const initialState = {
   isLoading: true,
   errMes: null,
   utilities: utilities,
-  // tariffs: tariffs,
-  // categories: categories,
   flatId: flatId
 };
 
@@ -26,13 +24,13 @@ export const Utilities = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.ADD_UTILITY:
       var utility = {};
-      utility.id = state.utilities.length;
       utility.category_id = action.payload.utilityParams.categoryId;
       utility.tariff_id = action.payload.utilityParams.tariffId;
       utility.description = action.payload.utilityParams.description;
       utility.start_value_counter = action.payload.utilityParams.startCounterValue;
       var newUtilities = state.utilities.concat(utility);
-      return Object.assign({}, state, {utilities: newUtilities, isLoading: false});
+      return {...state, isLoading: false, errMes: null, utilities: newUtilities};
+      // return Object.assign({}, state, {utilities: newUtilities, isLoading: false});
     case ActionTypes.UTILITIES_LOADING:
       // return Object.assign({}, state, {isLoading: true, errMes: null, utilities: []});
       return {...state, isLoading: true, errMes: null, utilities: []};

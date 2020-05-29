@@ -1,12 +1,11 @@
-%div{ class:"row"}
-  %aside{ class:"col-md-4"}
-    %section{ class:"user_info"}
+.row
+  %aside.col-md-4
+    %section.user-info
       = render 'payer'
-  %div{ class:"col-md-8"}
+      = link_to 'Счета', flat_accounts_path(@flat.id), id: 'to_accounts', flatId: @flat.id
+  .col-md-8
     %h3 Услуги
-    #utilities
+    -#utilities
     #root
-    #utilities_data{flatId: @flat.id.to_json, utilities: @utilities.to_json, tariffs: @tariffs.to_json, categories: @categories.to_json}
-    -#= javascript_pack_tag 'utilities_by_flat'
-    -#= javascript_pack_tag 'index'
+    -#utilities_data{flatId: @flat.id.to_json, utilities: @utilities.to_json, tariffs: @tariffs.to_json, categories: @categories.to_json}
     = javascript_pack_tag 'App'

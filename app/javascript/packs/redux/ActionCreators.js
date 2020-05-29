@@ -17,20 +17,37 @@ export const addAccount = (flatId, accountParams) => ({
     accountParams: accountParams
   }
 });
-export const addUtility = (flatId, utilityParams) => ({
+export const addUtility = (utility) => ({
   type:ActionTypes.ADD_UTILITY,
-  payload: {
-    flatId: flatId,
-    utilityParams: utilityParams
-  }
+  payload: utility
 });
-export const fetchUtilities = () => (dispatch) => {
+export const postUtility = (flatId, utility) => (dispatch) => {
+  const newUtility = {
+    flatId: flatId,
+    utility: utility
+  };
+  $.ajax({
+      type: 'POST',
+      dataType: 'json',
+      data: {flat_id: flatId, utility: {category_id: utility.categoryId, tariff_id: utility.tariffId, description: utility.description, start_value_counter: utility.startCounterValue }},
+      }).done((data) => {
+        dispatch(addUtility(data.utility));
+      }).fail((res) => {
+        this.setState({errors: ["Ошибка записи в базу"]});
+      });
+};
+export const fetchUtilities = (flatId) => (dispatch) => {
   dispatch(utilitiesLoading(true));
 
-  // return(fetch())
-  setTimeout(() => {
-    dispatch(addUtilities(utilities));
-  }, 2000);
+  $.ajax({
+      type: 'GET',
+      url: '/flats/'+flatId+'/utilities',
+      dataType: 'json',
+    }).done((data) => {
+      dispatch(addUtilities(data.utilities));
+    }).fail((res) => {
+      dispatch(tariffsFailed("Ошибка при чтении услуг из базы"));
+    });
 };
 export const utilitiesLoading = () => ({
   type: ActionTypes.UTILITIES_LOADING
@@ -54,13 +71,16 @@ export const fetchTariffs = () => (dispatch) => {
       dispatch(tariffsFailed("Ошибка при чтении тарифов из базы"));
       // this.setState({errors: ["Ошибка при чтении тарифов из базы"]});
     });
-    // return fetch('/tariffs',{
-    // headers: {
-    //   'Content-Type': 'application/json',
-    // }}
-    // )
+    // return fetch('http://localhost:3000/tariffs',{
+  // method: 'POST', // or 'PUT'
+  // headers: {
+    // 'Content-Type': 'application/json',
+  // }
+  // body: JSON.stringify(data),
+// })
     // .then(response => response.json())
-    // .then(tariffs => {alert(tariffs[0]); dispatch(addTariffs(tariffs))});
+    // .then(tariffs => {alert(tariffs[0]); //dispatch(addTariffs(tariffs))
+    // });
 };
 export const tariffsLoading = () => ({
   type: ActionTypes.TARIFFS_LOADING

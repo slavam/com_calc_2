@@ -71,7 +71,7 @@ class UtilityForm extends React.Component {
   }
   handleSubmit(e){
     e.preventDefault();
-    this.props.addUtility(this.props.flatId, this.state);
+    this.props.postUtility(this.props.flatId, this.state);
     this.state.description = '';
     this.state.startCounterValue = 0;
   }
@@ -109,7 +109,7 @@ class UtilityForm extends React.Component {
 //   fetchTariffs: () => dispatch(fetchTariffs())
 // });
 const mapStateToProps = state => {
-  return {tariffs: state.tariffs.tariffs, flatId: state.accounts.flatId}; // categories: state.tariffs.categories,
+  return {tariffs: state.tariffs.tariffs, flatId: state.accounts.flatId, categories: state.tariffs.categories}
 };
 export default connect(mapStateToProps)(UtilityForm);
 // export default connect(mapStateToProps, mapDispatchToProps)(UtilityForm);

@@ -6,10 +6,12 @@ class TariffsController < ApplicationController
   def index
     @tariffs = Tariff.all.order(:category_id, :name)
     @categories = Category.active_categories #all.order(:name)
+    # render json: {tariffs: @tariffs}
     respond_to do |format|
       format.html
       format.json do
-        # render json: @tariffs
+          # render json: {tariffs: @tariffs}
+    #     render json: @tariffs.to_json
         render json: {tariffs: @tariffs, categories: @categories}
       end
     end
