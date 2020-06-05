@@ -3,7 +3,9 @@ Rails.application.routes.draw do
     resources :utilities
     resources :accounts
   end
-  root 'tariffs#index'
+  # root 'tariffs#index'
+  root 'categories#index'
+  # get '/*path' => 'categories#index'
   resources :tariffs
   resources :categories
   get 'sessions/new'

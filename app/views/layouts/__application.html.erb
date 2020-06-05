@@ -3,22 +3,21 @@
   <head>
     <title>ComCalculator</title>
     <%= csrf_meta_tags %>
-    <!--%= csp_meta_tag %-->
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <%= stylesheet_pack_tag 'application' %>
-    <%= javascript_pack_tag 'Index' %>
-    <!--%= render 'layouts/shim' %-->
+    <%= render 'layouts/shim' %>
   </head>
 
   <body>
-    <!--%= render 'layouts/header' %-->
-    <%= render "shared/navigation" %>
-    <%= render "shared/flash" %>
+    <%= render 'layouts/header' %>
     <div class="container">
+      <% flash.each do |message_type, message| %>
+        <div class="alert alert-<%= message_type %>"><%= message %></div>
+      <% end %>
       <%= yield %>
+      <%= render 'layouts/footer' %>
     </div>
+    <%= debug(params) if Rails.env.development? %>
   </body>
 </html>

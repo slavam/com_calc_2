@@ -8,6 +8,7 @@ class UtilityForm extends React.Component {
   constructor(props) {
     super(props);
     this.categories = [];
+
     this.props.categories.map((c) => {
       this.categories.push({value: c.id, label: c.name});
     });
@@ -33,10 +34,11 @@ class UtilityForm extends React.Component {
     this.handleValueChange = this.handleValueChange.bind(this);
   }
   componentDidMount(){
+
     // this.props.fetchTariffs();
-  //  this.props.categories.map((c) => {
-  //    this.categories.push({value: c.id, label: c.name});
-  //  });
+    // this.props.categories.map((c) => {
+    //   this.categories.push({value: c.id, label: c.name});
+    // });
   }
   handleCategorySelected(value){
     let categoryId = value.value;
@@ -76,11 +78,11 @@ class UtilityForm extends React.Component {
     this.state.startCounterValue = 0;
   }
   render() {
-    let categories = [];
+    var categories = [];
     this.props.categories.map((c) => {
       categories.push({value: c.id, label: c.name});
     });
-    let tariff = (this.props.categories.some(cat => cat.id == this.state.categoryId && cat.is_variable_tariff)) ?
+    var tariff = (this.props.categories.some(cat => cat.id == this.state.categoryId && cat.is_variable_tariff)) ?
       <p>Тариф зависит от потребленного количества</p> :
       <Select value={this.state.tariff} onChange={this.handleTariffSelected} options={this.tariffs}/>;
     let counter = (this.props.categories.some(cat => cat.id == this.state.categoryId && cat.is_counter)) ?
@@ -88,8 +90,8 @@ class UtilityForm extends React.Component {
     return(
       <div>
         <form className="utilityForm" onSubmit={(event) => this.handleSubmit(event)}>
-          <div>Категория
-            <Select value={this.state.category} onChange={this.handleCategorySelected} options={categories}/>
+          <div>Категория {this.props.categories.length}
+            <Select value={this.state.category} onChange={this.handleCategorySelected} options={this.categories}/>
           </div>
           <div>Тариф
             {tariff}
@@ -108,8 +110,9 @@ class UtilityForm extends React.Component {
 // const mapDispatchToProps = dispatch => ({
 //   fetchTariffs: () => dispatch(fetchTariffs())
 // });
-const mapStateToProps = state => {
-  return {tariffs: state.tariffs.tariffs, flatId: state.accounts.flatId, categories: state.tariffs.categories}
-};
-export default connect(mapStateToProps)(UtilityForm);
+// const mapStateToProps = state => {
+//   return {tariffs: state.tariffs.tariffs, flatId: state.accounts.flatId, categories: state.tariffs.categories}
+// };
+export default connect(null)(UtilityForm);
+// export default connect(mapStateToProps)(UtilityForm);
 // export default connect(mapStateToProps, mapDispatchToProps)(UtilityForm);

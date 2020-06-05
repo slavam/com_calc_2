@@ -4,12 +4,13 @@ class UtilitiesController < ApplicationController
 
   def index
     @utilities = @flat.utilities.order(:id)
-    # @categories = Category.active_categories
-    # @tariffs = Tariff.all
+    @categories = Category.active_categories
+    @tariffs = Tariff.all
+    # render json: {utilities: @utilities, tariffs: @tariffs, categories: @categories}
     respond_to do |format|
       format.html
       format.json do
-        render json: {utilities: @utilities}
+        render json: {utilities: @utilities, tariffs: @tariffs, categories: @categories}
         # render json: {tariffs: @tariffs, categories: @categories}
       end
     end

@@ -1,10 +1,18 @@
 class CategoriesController < ApplicationController
   before_action :set_category, only: [:show, :edit, :update, :destroy]
+  # respond_to :json
+  before_action :check_format, only: :index
+
+  def check_format
+    render :nothing => true, :status => 406 unless params[:format] == 'json' || request.headers["Accept"] =~ /json/
+  end
 
   # GET /categories
   # GET /categories.json
   def index
     @categories = Category.all.order(:name)
+    # respond_to @categories.to_json
+    render json: @categories
   end
 
   # GET /categories/1

@@ -1,17 +1,18 @@
 import React from 'react';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import { Loading } from './loadingComponent';
 // const UtilityTable = ({isLoading, errMes, categories, tariffs, utilities}) =>(
 const UtilityTable = (props) => {
+// class UtilityTable extends React.Component {
   // constructor(props) {
   //   super(props);
+  // }
   //   this.handleDeleteClick = this.handleDeleteClick.bind(this);
   // }
   // handleDeleteClick(e){
   //   this.props.onDeleteUtility(e.target.id);
   // }
-  // render() {
-    // var that = this;
+  // render(){
   if(props.isLoading){
     return(
       <div className="container">
@@ -45,9 +46,9 @@ const UtilityTable = (props) => {
         <tbody>
             {props.utilities.map((u) => {
               let deleteLink = <input id={u.id} type="submit" value="Удалить" onClick={this.handleDeleteClick}/>;
-              let category;
+              var category;
               props.categories.some(cat => {category = cat; return cat.id == u.category_id});
-              let tariff;
+              var tariff;
               props.tariffs.some(tar => {tariff = tar; return tar.id == u.tariff_id});
               return <tr key={u.id}><td>{category.name}</td><td>{category.is_variable_tariff ? 'Тариф зависит от количества' : tariff.value}</td><td>{u.description}</td><td>{category.is_counter ? 'Да':'Нет'}</td><td>{u.start_value_counter}</td><td>{u.last_value_counter}</td><td>{deleteLink}</td></tr>;
             })
@@ -57,7 +58,9 @@ const UtilityTable = (props) => {
     </div>
   );
 }
-const mapStateToProps = state => {
-  return {isLoading: state.utilities.isLoading, errMes: state.utilities.errMes, categories: state.tariffs.categories, tariffs: state.tariffs.tariffs, utilities: state.utilities.utilities, flatId: state.utilities.flatId};
-}
-export default connect(mapStateToProps)(UtilityTable);
+// }
+// const mapStateToProps = state => {
+//   return {isLoading: state.utilities.isLoading, errMes: state.utilities.errMes, categories: state.tariffs.categories, tariffs: state.tariffs.tariffs, utilities: state.utilities.utilities, flatId: state.utilities.flatId};
+// }
+// export default connect(mapStateToProps)(UtilityTable);
+export default connect(null)(UtilityTable);

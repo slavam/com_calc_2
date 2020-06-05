@@ -1,10 +1,10 @@
 import * as ActionTypes from './actionTypes';
 
-var utilities = [];
-const node = document.getElementById('utilities_data');
-if(node){
-  utilities = JSON.parse(node.getAttribute('utilities'));
-}
+// var utilities = [];
+// const node = document.getElementById('utilities_data');
+// if(node){
+//   utilities = JSON.parse(node.getAttribute('utilities'));
+// }
 
 export const getCategory = (categoryId) => ({
   type: ActionTypes.GET_CATEGORY,
@@ -44,7 +44,7 @@ export const fetchUtilities = (flatId) => (dispatch) => {
       url: '/flats/'+flatId+'/utilities',
       dataType: 'json',
     }).done((data) => {
-      dispatch(addUtilities(data.utilities));
+      dispatch(addUtilities(data));
     }).fail((res) => {
       dispatch(tariffsFailed("Ошибка при чтении услуг из базы"));
     });
@@ -56,9 +56,9 @@ export const utilitiesFailed = (errmes) => ({
   type: ActionTypes.UTILITIES_FAILED,
   payload: errmes
 });
-export const addUtilities = (utilities) => ({
+export const addUtilities = (data) => ({
   type: ActionTypes.ADD_UTILITIES,
-  payload: utilities
+  payload: {utilities: data.utilities, categories: data.categories, tariffs: data.tariffs}
 });
 export const fetchTariffs = () => (dispatch) => {
   $.ajax({
