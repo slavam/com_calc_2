@@ -13,4 +13,6 @@
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
 // require('bootstrap')
+// require("./components/UtilityApp");
+require('./App')
 import 'bootstrap/dist/css/bootstrap'

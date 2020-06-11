@@ -1,6 +1,11 @@
 class TariffsController < ApplicationController
   before_action :set_tariff, only: [:show, :edit, :update, :destroy]
 
+  # before_action :check_format, only: :index
+  #
+  # def check_format
+  #   render :nothing => true, :status => 406 unless params[:format] == 'json' || request.headers["Accept"] =~ /json/
+  # end
   # GET /tariffs
   # GET /tariffs.json
   def index

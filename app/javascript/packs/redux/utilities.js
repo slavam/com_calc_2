@@ -34,7 +34,7 @@ export const Utilities = (state = initialState, action) => {
     case ActionTypes.UTILITIES_FAILED:
       return {...state, isLoading: false, errMes: action.payload, utilities: []};
     case ActionTypes.ADD_UTILITIES:
-      return {...state, isLoading: false, errMes: null, utilities: action.payload.utilities, categories: action.payload.categories, tariffs: action.payload.tariffs};
+      return {...state, isLoading: false, errMes: null, utilities: action.payload.utilities, categories: action.payload.categories, tariffs: action.payload.tariffs, flatId: action.payload.flatId};
     default:
       return state;
   }

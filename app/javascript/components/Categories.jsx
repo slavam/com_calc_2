@@ -1,45 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import {connect} from 'react-redux';
+import { fetchCategories } from '../packs/redux/ActionCreators';
 
 class Categories extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      categories: []
-    };
-  }
   componentDidMount() {
-      const url = "/categories/index";
-      // fetch(url)
-    //   fetch(url, {
-    //   method: "GET",
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   }
-    // })
-        // .then(response => {
-        //   if (response.ok) {
-        //     return response.json();
-        //   }
-        //   throw new Error("Network response was not ok.");
-        // })
-        // .then(response => this.setState({ categories: response }))
-        // .catch(() => this.props.history.push("/"));
-      $.ajax({
-          type: 'GET',
-          url: "/categories",
-          dataType: 'json',
-        }).done((data) => {
-          this.setState({ categories: data });
-          // dispatch(addTariffs(data));
-        }).fail((res) => {
-          // dispatch(tariffsFailed("Ошибка при чтении тарифов из базы"));
-          this.setState({errors: ["Ошибка при чтении тарифов из базы"]});
-        });
+    this.props.fetchCategories();
   }
   render() {
-    const { categories } = this.state;
-    const allCategories = categories.map((category, index) => (
+    const allCategories = this.props.categories.map((category, index) => (
       <div key={index} className="col-md-6 col-lg-4">
         <div className="card mb-4">
           <div className="card-body">
@@ -51,13 +20,6 @@ class Categories extends React.Component {
         </div>
       </div>
     ));
-    const noRecipe = (
-      <div className="vw-100 vh-50 d-flex align-items-center justify-content-center">
-        <h4>
-          No recipes yet. Why not <Link to="/new_recipe">create one</Link>
-        </h4>
-      </div>
-    );
 
     return (
       <div>
@@ -80,4 +42,11 @@ class Categories extends React.Component {
     );
   }
 }
-export default Categories;
+// export default Categories;
+const mapDispatchToProps = dispatch => ({
+  fetchCategories: () => dispatch(fetchCategories())
+});
+const mapStateToProps = state => {
+  return {categories: state.categories.categories};
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Categories);

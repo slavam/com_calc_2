@@ -1,14 +1,5 @@
 import * as ActionTypes from './actionTypes';
 
-// var categories = [];
-// var tariffs = [];
-//
-// const node = document.getElementById('tariffs-data');
-// if(node){
-//   categories = JSON.parse(node.getAttribute('categories'));
-//   tariffs = JSON.parse(node.getAttribute('tariffs'));
-// }
-
 const initialState = {
   isLoading: true,
   errMess: null,

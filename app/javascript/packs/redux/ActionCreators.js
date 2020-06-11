@@ -58,7 +58,7 @@ export const utilitiesFailed = (errmes) => ({
 });
 export const addUtilities = (data) => ({
   type: ActionTypes.ADD_UTILITIES,
-  payload: {utilities: data.utilities, categories: data.categories, tariffs: data.tariffs}
+  payload: {utilities: data.utilities, categories: data.categories, tariffs: data.tariffs, flatId: data.flat_id}
 });
 export const fetchTariffs = () => (dispatch) => {
   $.ajax({
@@ -92,4 +92,52 @@ export const tariffsFailed = (errmess) => ({
 export const addTariffs = (tariffs_categories) => ({
   type: ActionTypes.ADD_TARIFFS,
   payload: tariffs_categories
+});
+export const fetchCategories = () => (dispatch) => {
+  $.ajax({
+      type: 'GET',
+      url: "/categories",
+      dataType: 'json',
+    }).done((data) => {
+      dispatch(addCategories(data));
+    }).fail((res) => {
+      dispatch(tariffsFailed("Ошибка при чтении категорий из базы"));
+      // this.setState({errors: ["Ошибка при чтении тарифов из базы"]});
+    });
+};
+export const categoriesLoading = () => ({
+  type: ActionTypes.CATEGORIES_LOADING
+});
+export const categoriesFailed = (errmess) => ({
+  type: ActionTypes.CATEGORIES_FAILED,
+  payload: errmess
+});
+export const addCategories = (categories) => ({
+  type: ActionTypes.ADD_CATEGORIES,
+  payload: categories
+});
+
+export const fetchFlats = (userId) => (dispatch) => {
+  $.ajax({
+      type: 'GET',
+      // url: `/users/${userId}`,
+      url: userId,
+      dataType: 'json',
+    }).done((data) => {
+      dispatch(addFlats(data));
+    }).fail((res) => {
+      dispatch(flatsFailed("Ошибка при чтении данных пользователя из базы"));
+      // this.setState({errors: ["Ошибка при чтении тарифов из базы"]});
+    });
+};
+export const flatsLoading = () => ({
+  type: ActionTypes.FLATS_LOADING
+});
+export const flatsFailed = (errmess) => ({
+  type: ActionTypes.FLATS_FAILED,
+  payload: errmess
+});
+export const addFlats = (data) => ({
+  type: ActionTypes.ADD_FLATS,
+  payload: data
 });

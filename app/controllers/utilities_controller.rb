@@ -6,14 +6,15 @@ class UtilitiesController < ApplicationController
     @utilities = @flat.utilities.order(:id)
     @categories = Category.active_categories
     @tariffs = Tariff.all
-    # render json: {utilities: @utilities, tariffs: @tariffs, categories: @categories}
-    respond_to do |format|
-      format.html
-      format.json do
-        render json: {utilities: @utilities, tariffs: @tariffs, categories: @categories}
-        # render json: {tariffs: @tariffs, categories: @categories}
-      end
-    end
+    # puts ">>>>>>>#{@flat.id}<<<<<<<<<"
+    render json: {utilities: @utilities, tariffs: @tariffs, categories: @categories, flat_id: @flat.id}
+    # respond_to do |format|
+    #   format.html
+    #   format.json do
+    #     render json: {utilities: @utilities, tariffs: @tariffs, categories: @categories}
+    #     # render json: {tariffs: @tariffs, categories: @categories}
+    #   end
+    # end
   end
 
   def create

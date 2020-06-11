@@ -12,10 +12,8 @@ class UtilitiesByFlat extends React.Component {
     this.handleDeleteUtility = this.handleDeleteUtility.bind(this);
   }
   componentDidMount(){
-    this.props.fetchTariffs();
-    const link = document.getElementById('to_accounts');
-    this.flatId = JSON.parse(link.getAttribute('flatId'));
-    this.props.fetchUtilities(this.flatId);
+    // this.props.fetchTariffs();
+    this.props.fetchUtilities(this.props.flatId);
   }
   handleDeleteUtility(utilityId){
     $.ajax({
@@ -48,7 +46,7 @@ const mapDispatchToProps = dispatch => ({
   fetchUtilities: (flatId) => dispatch(fetchUtilities(flatId))
 });
 const mapStateToProps = state => {
-  return {isLoading: state.utilities.isLoading, errMes: state.utilities.errMes, tariffs: state.tariffs.tariffs, categories: state.tariffs.categories, total: state.accounts.total, utilities: state.utilities.utilities};
+  return {flatId: state.utilities.flatId, isLoading: state.utilities.isLoading, errMes: state.utilities.errMes, tariffs: state.utilities.tariffs, categories: state.utilities.categories, total: state.accounts.total, utilities: state.utilities.utilities};
 };
 export default connect(mapStateToProps, mapDispatchToProps)(UtilitiesByFlat);
 
