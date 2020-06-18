@@ -13,7 +13,7 @@ class Flats extends React.Component {
         <div className="card mb-4">
           <div className="card-body">
             <h5 className="card-title">Адрес: {flat.address}</h5>
-            {/*<a href={`/flats/${flat.id}/utilities`}>Услуги</a>*/}
+            <p>Плательщик {flat.payer_lastname}</p>
             <Link to={`/flats/${flat.id}/utilities`} className="btn custom-button">
               Услуги
             </Link>

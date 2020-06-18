@@ -28,7 +28,9 @@ class App extends React.Component{
             <Route exact path='/categories' component={() => <Categories />} />
             <Route exact path='/tariffs' component={() => <TariffsByCategory />} />
             <Route path='/flats/:flatId/accounts' component={() => <AccountsByFlat />} />
-            <Route path='/flats/:flatId/utilities' component={() => <UtilitiesByFlat />} />
+            {/*<Route path='/flats/:flatId/utilities' component={() => <UtilitiesByFlat userId={this.props.userId} />} />*/}
+            <Route path='/flats/:flatId/utilities' component={UtilitiesByFlat } />
+            {/*<Route path='/flats/:flatId/utilities' component={() => <UtilitiesByFlat />} />*/}
           </Switch>
         </BrowserRouter>
       </Provider>

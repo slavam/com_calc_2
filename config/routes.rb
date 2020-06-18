@@ -9,7 +9,8 @@ Rails.application.routes.draw do
   end
   # root 'tariffs#index'
   # logged_in_user do
-    root "pages#my_todo_items"
+  root "pages#my_todo_items"
+  # get '/*path' => 'pages#my_todo_items'
   # end
   # root 'categories#index'
   # get '/*path' => 'categories#index'
@@ -22,5 +23,6 @@ Rails.application.routes.draw do
   post   '/login',   to: 'sessions#create'
   delete '/logout',  to: 'sessions#destroy'
   resources :users
+  get '/*path' => 'pages#my_todo_items'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

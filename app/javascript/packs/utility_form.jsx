@@ -1,14 +1,11 @@
 import React from 'react';
 import Select from 'react-select';
 import { connect } from "react-redux";
-// import { addUtility, fetchTariffs } from './redux/ActionCreators';
 
-// export default class UtilityForm extends React.Component {
 class UtilityForm extends React.Component {
   constructor(props) {
     super(props);
     this.categories = [];
-
     this.props.categories.map((c) => {
       this.categories.push({value: c.id, label: c.name});
     });
@@ -22,8 +19,8 @@ class UtilityForm extends React.Component {
       tariffId: 4,
       description: '',
       startCounterValue: 0.0,
-      category: {value:1, label: 'ssss'}, //this.categories[0],//{value: this.categories[0].id, label: this.categories[0].name},
-      tariff: {value: 4, label: 'ddddd'} //this.tariffs[0]
+      category: this.props.categories[0] ? {value: this.props.categories[0].id, label: this.props.categories[0].name}:{value:1, label: 'ssss'}, //this.categories[0],//{value: this.categories[0].id, label: this.categories[0].name},
+      tariff: this.props.tariffs[0] ? {value: this.props.tariffs[0].id, label: this.props.tariffs[0].name}:{value: 4, label: 'ddddd'}
       // errors: []
     };
     // this.handleCategoryChange = this.handleCategoryChange.bind(this);
@@ -33,13 +30,13 @@ class UtilityForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleValueChange = this.handleValueChange.bind(this);
   }
-  componentDidMount(){
-
+  // componentDidMount(){
+// alert('componentDidMount =>'+this.props.categories.length)
     // this.props.fetchTariffs();
     // this.props.categories.map((c) => {
     //   this.categories.push({value: c.id, label: c.name});
     // });
-  }
+  // }
   handleCategorySelected(value){
     let categoryId = value.value;
     this.tariffs = [];
@@ -78,6 +75,7 @@ class UtilityForm extends React.Component {
     this.state.startCounterValue = 0;
   }
   render() {
+    // alert('render => '+this.props.categories.length)
     var categories = [];
     this.props.categories.map((c) => {
       categories.push({value: c.id, label: c.name});
@@ -90,7 +88,7 @@ class UtilityForm extends React.Component {
     return(
       <div>
         <form className="utilityForm" onSubmit={(event) => this.handleSubmit(event)}>
-          <div>Категория {this.props.categories.length}
+          <div>Категория
             <Select value={this.state.category} onChange={this.handleCategorySelected} options={this.categories}/>
           </div>
           <div>Тариф

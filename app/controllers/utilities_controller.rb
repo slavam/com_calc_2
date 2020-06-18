@@ -7,7 +7,7 @@ class UtilitiesController < ApplicationController
     @categories = Category.active_categories
     @tariffs = Tariff.all
     # puts ">>>>>>>#{@flat.id}<<<<<<<<<"
-    render json: {utilities: @utilities, tariffs: @tariffs, categories: @categories, flat_id: @flat.id}
+    render json: {utilities: @utilities, tariffs: @tariffs, categories: @categories, flat_id: @flat.id, user_id: current_user.id}
     # respond_to do |format|
     #   format.html
     #   format.json do
@@ -31,9 +31,15 @@ class UtilitiesController < ApplicationController
   end
 
   def destroy
-    @utility.destroy
+    @utility&.destroy
+    render json: {message: 'Услуга удалена'}
     # flash[:success] = "Услуга удалена"
-    render json: {utilities: @flat.utilities.order(:id)}
+    # render json: {utilities: @flat.utilities.order(:id)}
+    # utilities = @flat.utilities.order(:id)
+    # @categories = Category.active_categories
+    # @tariffs = Tariff.all
+    # puts ">>>>>>>#{@flat.id}<<<<<<<<<"
+    # render json: {utilities: @utilities, tariffs: @tariffs, categories: @categories, flat_id: @flat.id, user_id: current_user.id}
   end
 
   private

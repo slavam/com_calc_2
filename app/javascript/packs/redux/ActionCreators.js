@@ -1,11 +1,5 @@
 import * as ActionTypes from './actionTypes';
 
-// var utilities = [];
-// const node = document.getElementById('utilities_data');
-// if(node){
-//   utilities = JSON.parse(node.getAttribute('utilities'));
-// }
-
 export const getCategory = (categoryId) => ({
   type: ActionTypes.GET_CATEGORY,
   categoryId: categoryId
@@ -28,6 +22,7 @@ export const postUtility = (flatId, utility) => (dispatch) => {
   };
   $.ajax({
       type: 'POST',
+      url: "/flats/"+flatId+"/utilities/",
       dataType: 'json',
       data: {flat_id: flatId, utility: {category_id: utility.categoryId, tariff_id: utility.tariffId, description: utility.description, start_value_counter: utility.startCounterValue }},
       }).done((data) => {
@@ -36,6 +31,18 @@ export const postUtility = (flatId, utility) => (dispatch) => {
         this.setState({errors: ["Ошибка записи в базу"]});
       });
 };
+// export const deleteUtility = (utilityId) => (dispatch) => {
+//   $.ajax({
+//     type: 'DELETE',
+//     // url: "/flats/"+this.props.flatId+"/utilities/"+utilityId
+//     url: "/utilities/"+utilityId
+//   }).done(function(data){
+//     alert(data.message);
+//     // dispatch(addUtilities(data));
+//     // this.setState({utilities: data.utilities});
+//   }.bind(this))
+//   .fail(function(res){});
+// };
 export const fetchUtilities = (flatId) => (dispatch) => {
   dispatch(utilitiesLoading(true));
 
@@ -58,7 +65,7 @@ export const utilitiesFailed = (errmes) => ({
 });
 export const addUtilities = (data) => ({
   type: ActionTypes.ADD_UTILITIES,
-  payload: {utilities: data.utilities, categories: data.categories, tariffs: data.tariffs, flatId: data.flat_id}
+  payload: {utilities: data.utilities, categories: data.categories, tariffs: data.tariffs, flatId: data.flat_id, userId: data.user_id}
 });
 export const fetchTariffs = () => (dispatch) => {
   $.ajax({
