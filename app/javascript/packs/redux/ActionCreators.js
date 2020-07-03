@@ -4,45 +4,76 @@ export const getCategory = (categoryId) => ({
   type: ActionTypes.GET_CATEGORY,
   categoryId: categoryId
 });
-export const addAccount = (flatId, accountParams) => ({
+export const addAccount = (account) => ({
   type: ActionTypes.ADD_ACCOUNT,
-  payload: {
-    flatId: flatId,
-    accountParams: accountParams
-  }
+  payload: account
 });
+export const postAccount = (flatId, accountParams) => (dispath) => {
+  $.ajax({
+      type: 'POST',
+      url: "/flats/"+flatId+"/accounts/",
+      dataType: 'json',
+      data: {account_data: {total: accountParams.total,
+                            monthsNumber: accountParams.monthsNumber,
+                            startDate: accountParams.startDate,
+                            utilityParams: accountParams.utilityParams}},
+      }).done((data) => {
+        dispatch(addAccount(data.account));
+      }).fail((res) => {
+        // dispatch(accountFailed("Ошибка при записи счета в базу"));
+      });
+};
 export const addUtility = (utility) => ({
   type:ActionTypes.ADD_UTILITY,
   payload: utility
 });
 export const postUtility = (flatId, utility) => (dispatch) => {
-  const newUtility = {
-    flatId: flatId,
-    utility: utility
-  };
+  // const newUtility = {
+  //   flatId: flatId,
+  //   utility: utility
+  // };
   $.ajax({
       type: 'POST',
       url: "/flats/"+flatId+"/utilities/",
       dataType: 'json',
-      data: {flat_id: flatId, utility: {category_id: utility.categoryId, tariff_id: utility.tariffId, description: utility.description, start_value_counter: utility.startCounterValue }},
+      data: {flat_id: flatId, utility: {category_id: utility.category.value, tariff_id: utility.tariff.value, description: utility.description, start_value_counter: utility.startCounterValue }},
       }).done((data) => {
         dispatch(addUtility(data.utility));
       }).fail((res) => {
         this.setState({errors: ["Ошибка записи в базу"]});
       });
 };
-// export const deleteUtility = (utilityId) => (dispatch) => {
-//   $.ajax({
-//     type: 'DELETE',
-//     // url: "/flats/"+this.props.flatId+"/utilities/"+utilityId
-//     url: "/utilities/"+utilityId
-//   }).done(function(data){
-//     alert(data.message);
-//     // dispatch(addUtilities(data));
-//     // this.setState({utilities: data.utilities});
-//   }.bind(this))
-//   .fail(function(res){});
-// };
+export const fetchAccounts = (flatId) => (dispatch) => {
+  dispatch(accountsLoading(true));
+
+  $.ajax({
+      type: 'GET',
+      url: '/flats/'+flatId+'/accounts',
+      dataType: 'json',
+    }).done((data) => {
+      dispatch(addAccounts(data));
+    }).fail((res) => {
+      dispatch(accountsFailed("Ошибка при чтении счетов из базы"));
+    });
+};
+export const accountsLoading = () => ({
+  type: ActionTypes.ACCOUNTS_LOADING
+});
+export const accountsFailed = (errmes) => ({
+  type: ActionTypes.ACCOUNTS_FAILED,
+  payload: errmes
+});
+export const addAccounts = (data) => ({
+  type: ActionTypes.ADD_ACCOUNTS,
+  payload: {
+    accounts: data.accounts,
+    utilityParams: data.utility_params,
+    tariffLimits: data.tariff_limits,
+    total: data.total,
+    flatId: data.flat_id,
+    userId: data.user_id
+  }
+});
 export const fetchUtilities = (flatId) => (dispatch) => {
   dispatch(utilitiesLoading(true));
 
@@ -53,7 +84,7 @@ export const fetchUtilities = (flatId) => (dispatch) => {
     }).done((data) => {
       dispatch(addUtilities(data));
     }).fail((res) => {
-      dispatch(tariffsFailed("Ошибка при чтении услуг из базы"));
+      dispatch(utilitiesFailed("Ошибка при чтении услуг из базы"));
     });
 };
 export const utilitiesLoading = () => ({
@@ -76,7 +107,6 @@ export const fetchTariffs = () => (dispatch) => {
       dispatch(addTariffs(data));
     }).fail((res) => {
       dispatch(tariffsFailed("Ошибка при чтении тарифов из базы"));
-      // this.setState({errors: ["Ошибка при чтении тарифов из базы"]});
     });
     // return fetch('http://localhost:3000/tariffs',{
   // method: 'POST', // or 'PUT'
@@ -109,7 +139,6 @@ export const fetchCategories = () => (dispatch) => {
       dispatch(addCategories(data));
     }).fail((res) => {
       dispatch(tariffsFailed("Ошибка при чтении категорий из базы"));
-      // this.setState({errors: ["Ошибка при чтении тарифов из базы"]});
     });
 };
 export const categoriesLoading = () => ({
@@ -134,7 +163,6 @@ export const fetchFlats = (userId) => (dispatch) => {
       dispatch(addFlats(data));
     }).fail((res) => {
       dispatch(flatsFailed("Ошибка при чтении данных пользователя из базы"));
-      // this.setState({errors: ["Ошибка при чтении тарифов из базы"]});
     });
 };
 export const flatsLoading = () => ({

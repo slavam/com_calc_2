@@ -14,10 +14,10 @@ class Flats extends React.Component {
           <div className="card-body">
             <h5 className="card-title">Адрес: {flat.address}</h5>
             <p>Плательщик {flat.payer_lastname}</p>
-            <Link to={`/flats/${flat.id}/utilities`} className="btn custom-button">
+            <Link to={`/flats/${flat.id}/utilities`} className="btn btn-link">
               Услуги
             </Link>
-            <Link to={`/flats/${flat.id}/accounts`} className="btn custom-button">
+            <Link to={`/flats/${flat.id}/accounts`} className="btn btn-link">
               Счета
             </Link>
           </div>
@@ -26,11 +26,7 @@ class Flats extends React.Component {
     ));
     return (
       <div>
-        <section className="jumbotron jumbotron-fluid text-center">
-          <div className="container py-5">
-            <h1 className="display-4">Жилье пользователя {this.props.user ? this.props.user.last_name : ''}</h1>
-          </div>
-        </section>
+        <h2 className="display-4">Жилье пользователя {this.props.user ? this.props.user.last_name : ''}</h2>
         <div className="py-5">
           <main className="container">
             <div className="row">

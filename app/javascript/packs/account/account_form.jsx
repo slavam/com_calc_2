@@ -11,7 +11,7 @@ class AccountForm extends React.Component {
     // this.monthsNumber = 1;
 
     this.state = {
-      utilityParams: this.props.utilityParams,
+      // utilityParams: this.props.utilityParams,
       monthsNumber: 1,
       total: this.props.total,
       startDate: now.getFullYear()+'-'+month+'-01'
@@ -22,9 +22,12 @@ class AccountForm extends React.Component {
     this.calcTotal = this.calcTotal.bind(this);
     this.updateCounterValue = this.updateCounterValue.bind(this);
   }
+  componentDidMount(){
+    this.calcTotal();
+  }
   updateCounterValue(utilityId, newValue, tariff){
-    this.state.utilityParams[utilityId].new_value_counter = +newValue;
-    this.state.utilityParams[utilityId].tariff = tariff;
+    this.props.utilityParams[utilityId].new_value_counter = +newValue;
+    this.props.utilityParams[utilityId].tariff = tariff;
     this.calcTotal();
   }
   dateChange(e) {
@@ -37,7 +40,7 @@ class AccountForm extends React.Component {
   }
   handleSubmit(e){
     e.preventDefault();
-    this.props.addAccount(this.props.flatId, this.state);
+    this.props.postAccount(this.props.flatId, this.state);
   }
   calcTotal(){
     let total = 0;
@@ -48,9 +51,11 @@ class AccountForm extends React.Component {
       }else
         total += up.quantity*up.tariff*this.state.monthsNumber;
     });
+    // alert(total)
     this.setState({total: total});
   }
   render() {
+    // let total = +this.state.total > 0 ? this.state.total : this.props.total;
     return(
       <div>
         <form className="account-form" onSubmit={(event) => this.handleSubmit(event)}>

@@ -12,15 +12,15 @@ export default class AccountLine extends React.Component{
   }
   valueCounterChange(e){
     let quantity = +e.target.value - this.props.utilityParams.old_value_counter;
-    let tariff; 
+    let tariff;
     if (this.props.utilityParams.is_variable_tariff)
-      this.props.tariffLimits.some(l => {tariff = +l.value; return l.low_edge <= quantity && l.top_edge >= quantity});
+      this.props.tariffLimits.some(l => {tariff = +l.value; return l.low_edge <= quantity && l.top_edge >= quantity;});
     else
       tariff = this.props.utilityParams.tariff;
     this.setState({valueCounter: +e.target.value, quantity: quantity.toFixed(2), tariff: tariff}); //, sum: sum});
     this.props.onUtilitySubmit(this.props.utilityId, e.target.value, tariff);
   }
-  
+
   render(){
     let sum = this.state.quantity*this.state.tariff*(this.props.utilityParams.is_counter ? 1 : this.props.monthsNumber);
     // let category = this.props.utilityParams.category_name.toUpperCase() + (this.props.utilityParams.description > '' ? ' ('+this.props.utilityParams.description+')' : '');

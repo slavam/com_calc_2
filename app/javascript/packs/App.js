@@ -14,10 +14,6 @@ import {connect} from 'react-redux';
 const store = ConfigureStore();
 
 class App extends React.Component{
-  // constructor(props){
-  //   super(props);
-  // }
-
   render() {
     return(
       <Provider store={store}>
@@ -27,10 +23,8 @@ class App extends React.Component{
             <Route exact path='/users/:userId' component={() => <Flats userId={this.props.userId} />} />
             <Route exact path='/categories' component={() => <Categories />} />
             <Route exact path='/tariffs' component={() => <TariffsByCategory />} />
-            <Route path='/flats/:flatId/accounts' component={() => <AccountsByFlat />} />
-            {/*<Route path='/flats/:flatId/utilities' component={() => <UtilitiesByFlat userId={this.props.userId} />} />*/}
+            <Route path='/flats/:flatId/accounts' component={ AccountsByFlat } />
             <Route path='/flats/:flatId/utilities' component={UtilitiesByFlat } />
-            {/*<Route path='/flats/:flatId/utilities' component={() => <UtilitiesByFlat />} />*/}
           </Switch>
         </BrowserRouter>
       </Provider>

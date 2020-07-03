@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Loading } from './loadingComponent';
-// const UtilityTable = ({isLoading, errMes, categories, tariffs, utilities}) =>(
-// const UtilityTable = (props) => {
+
 class UtilityTable extends React.Component {
   constructor(props) {
     super(props);
@@ -14,7 +13,6 @@ class UtilityTable extends React.Component {
       type: 'DELETE',
       url: "/flats/"+this.props.flatId+"/utilities/"+e.target.id
     }).done(function(data){
-      // alert(data.message);
       this.props.fetchUtilities(this.props.flatId);
     }.bind(this))
     .fail(function(res){});
@@ -58,7 +56,16 @@ class UtilityTable extends React.Component {
                 this.props.categories.some(cat => {category = cat; return cat.id == u.category_id;});
                 var tariff;
                 this.props.tariffs.some(tar => {tariff = tar; return tar.id == u.tariff_id;});
-                return <tr key={u.id}><td>{category.name}</td><td>{category.is_variable_tariff ? 'Тариф зависит от количества' : tariff.value}</td><td>{u.description}</td><td>{category.is_counter ? 'Да':'Нет'}</td><td>{u.start_value_counter}</td><td>{u.last_value_counter}</td><td>{deleteLink}</td></tr>;
+
+                return <tr key={u.id}>
+                    <td>{category.name}</td>
+                    <td>{category.is_variable_tariff ? 'Тариф зависит от количества' : tariff.value}</td>
+                    <td>{u.description}</td>
+                    <td>{category.is_counter ? 'Да':'Нет'}</td>
+                    <td>{category.is_counter ? u.start_value_counter : ''}</td>
+                    <td>{category.is_counter ? u.last_value_counter : ''}</td>
+                    <td>{deleteLink}</td>
+                  </tr>;
               })
             }
           </tbody>
