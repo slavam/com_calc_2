@@ -37,10 +37,13 @@ class AccountsByFlat extends React.Component {
   //     });
   // }
   render() {
+    let formIs = this.props.isLoading ?
+      null :
+      <AccountForm postAccount={this.props.postAccount} total={this.props.total} utilityParams={this.props.utilityParams} flatId={this.props.flatId} tariffLimits={this.props.tariffLimits} />;
     return(
       <div>
         <h3>Новый счет</h3>
-        <AccountForm postAccount={this.props.postAccount} total={this.props.total} utilityParams={this.props.utilityParams} flatId={this.props.flatId} tariffLimits={this.props.tariffLimits} />
+        {formIs}
         <h3>Список счетов</h3>
         <AccountTable />
         <Link to="/" className="btn btn-link">
@@ -62,6 +65,7 @@ const mapDispatchToProps = dispatch => ({
 });
 const mapStateToProps = state => {
   return {
+    isLoading: state.accounts.isLoading,
     userId: state.accounts.userId,
     accounts: state.accounts.accounts,
     utilityParams: state.accounts.utilityParams,

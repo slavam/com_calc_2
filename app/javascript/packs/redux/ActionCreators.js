@@ -1,5 +1,7 @@
 import * as ActionTypes from './actionTypes';
 
+const baseUrl = 'http://127.0.0.1:3000/';
+
 export const getCategory = (categoryId) => ({
   type: ActionTypes.GET_CATEGORY,
   categoryId: categoryId
@@ -28,10 +30,6 @@ export const addUtility = (utility) => ({
   payload: utility
 });
 export const postUtility = (flatId, utility) => (dispatch) => {
-  // const newUtility = {
-  //   flatId: flatId,
-  //   utility: utility
-  // };
   $.ajax({
       type: 'POST',
       url: "/flats/"+flatId+"/utilities/",
@@ -46,15 +44,18 @@ export const postUtility = (flatId, utility) => (dispatch) => {
 export const fetchAccounts = (flatId) => (dispatch) => {
   dispatch(accountsLoading(true));
 
-  $.ajax({
-      type: 'GET',
-      url: '/flats/'+flatId+'/accounts',
-      dataType: 'json',
-    }).done((data) => {
-      dispatch(addAccounts(data));
-    }).fail((res) => {
-      dispatch(accountsFailed("Ошибка при чтении счетов из базы"));
-    });
+  return fetch(baseUrl + 'flats/'+flatId+'/accounts')
+    .then(response => response.json())
+    .then(data => dispatch(addAccounts(data)));
+  // $.ajax({
+  //     type: 'GET',
+  //     url: '/flats/'+flatId+'/accounts',
+  //     dataType: 'json',
+  //   }).done((data) => {
+  //     dispatch(addAccounts(data));
+  //   }).fail((res) => {
+  //     dispatch(accountsFailed("Ошибка при чтении счетов из базы"));
+  //   });
 };
 export const accountsLoading = () => ({
   type: ActionTypes.ACCOUNTS_LOADING
@@ -77,15 +78,9 @@ export const addAccounts = (data) => ({
 export const fetchUtilities = (flatId) => (dispatch) => {
   dispatch(utilitiesLoading(true));
 
-  $.ajax({
-      type: 'GET',
-      url: '/flats/'+flatId+'/utilities',
-      dataType: 'json',
-    }).done((data) => {
-      dispatch(addUtilities(data));
-    }).fail((res) => {
-      dispatch(utilitiesFailed("Ошибка при чтении услуг из базы"));
-    });
+  return fetch(baseUrl + 'flats/'+flatId+'/utilities')
+    .then(response => response.json())
+    .then(data => dispatch(addUtilities(data)));
 };
 export const utilitiesLoading = () => ({
   type: ActionTypes.UTILITIES_LOADING

@@ -17,10 +17,15 @@ class UtilitiesByFlat extends React.Component {
     this.props.fetchUtilities(flatId);
   }
   render() {
-    return(
+    let formIs = this.props.isLoading ?
+      null :
       <div>
         <h3>Новая услуга</h3>
         <UtilityForm postUtility={this.props.postUtility} categories={this.props.categories} tariffs={this.props.tariffs} flatId={this.props.flatId}/>
+      </div>;
+    return(
+      <div>
+        {formIs}
         <h3>Список услуг. Всего услуг - {this.props.utilities.length}</h3>
         <UtilityTable fetchUtilities={this.props.fetchUtilities} errMes={this.props.errMes} isLoading={this.props.isLoading} utilities={this.props.utilities} categories={this.props.categories} tariffs={this.props.tariffs} flatId={this.props.flatId}/>
         <Link to="/" className="btn btn-link">

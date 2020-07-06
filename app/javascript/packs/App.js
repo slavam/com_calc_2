@@ -35,11 +35,8 @@ export default withRouter(connect(null)(App));
 
 document.addEventListener('turbolinks:load', () => {
   const app = document.getElementById('root');
-  var userId = null;
   if(app){
-    userId = JSON.parse(app.getAttribute('userId'));
+    let userId = JSON.parse(app.getAttribute('userId'));
+    ReactDOM.render(<App userId={userId}/>, app);
   }
-  app && ReactDOM.render(<App userId={userId}/>, app);
 });
-
-// ReactDOM.render(<App />, document.getElementById('root'));
