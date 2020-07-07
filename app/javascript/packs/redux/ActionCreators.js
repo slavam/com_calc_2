@@ -6,25 +6,6 @@ export const getCategory = (categoryId) => ({
   type: ActionTypes.GET_CATEGORY,
   categoryId: categoryId
 });
-export const addAccount = (account) => ({
-  type: ActionTypes.ADD_ACCOUNT,
-  payload: account
-});
-export const postAccount = (flatId, accountParams) => (dispath) => {
-  $.ajax({
-      type: 'POST',
-      url: "/flats/"+flatId+"/accounts/",
-      dataType: 'json',
-      data: {account_data: {total: accountParams.total,
-                            monthsNumber: accountParams.monthsNumber,
-                            startDate: accountParams.startDate,
-                            utilityParams: accountParams.utilityParams}},
-      }).done((data) => {
-        dispatch(addAccount(data.account));
-      }).fail((res) => {
-        // dispatch(accountFailed("Ошибка при записи счета в базу"));
-      });
-};
 export const addUtility = (utility) => ({
   type:ActionTypes.ADD_UTILITY,
   payload: utility
@@ -47,15 +28,6 @@ export const fetchAccounts = (flatId) => (dispatch) => {
   return fetch(baseUrl + 'flats/'+flatId+'/accounts')
     .then(response => response.json())
     .then(data => dispatch(addAccounts(data)));
-  // $.ajax({
-  //     type: 'GET',
-  //     url: '/flats/'+flatId+'/accounts',
-  //     dataType: 'json',
-  //   }).done((data) => {
-  //     dispatch(addAccounts(data));
-  //   }).fail((res) => {
-  //     dispatch(accountsFailed("Ошибка при чтении счетов из базы"));
-  //   });
 };
 export const accountsLoading = () => ({
   type: ActionTypes.ACCOUNTS_LOADING
@@ -74,6 +46,31 @@ export const addAccounts = (data) => ({
     flatId: data.flat_id,
     userId: data.user_id
   }
+});
+export const addAccount = (account) => ({
+  type: ActionTypes.ADD_ACCOUNT,
+  payload: account
+});
+export const postAccount = (flatId, accountParams) => (dispatch) => {
+  $.ajax({
+      type: 'POST',
+      url: "/flats/"+flatId+"/accounts/",
+      dataType: 'json',
+      data: {account_data: {total: accountParams.total,
+                            monthsNumber: accountParams.monthsNumber,
+                            startDate: accountParams.startDate,
+                            utilityParams: accountParams.utilityParams}},
+      }).done((data) => {
+        dispatch(addAccount(data.account));
+      }).fail((res) => {
+        // dispatch(accountFailed("Ошибка при записи счета в базу"));
+      });
+};
+export const setValueCounter = (utilityIndex, valueCounter, tariff) => ({
+  type: ActionTypes.SET_VALUE_COUNTER,
+  utilityIndex: utilityIndex,
+  valueCounter: valueCounter,
+  tariff: tariff
 });
 export const fetchUtilities = (flatId) => (dispatch) => {
   dispatch(utilitiesLoading(true));

@@ -6,7 +6,7 @@ import {syncHistoryWithStore, routerReducer} from 'react-router-redux';
 import AccountForm from './account_form';
 import AccountTable from './account_table';
 import { connect } from "react-redux";
-import { postAccount, fetchAccounts } from '../redux/ActionCreators';
+import { postAccount, setValueCounter, fetchAccounts } from '../redux/ActionCreators';
 
 class AccountsByFlat extends React.Component {
   // constructor(props) {
@@ -39,7 +39,7 @@ class AccountsByFlat extends React.Component {
   render() {
     let formIs = this.props.isLoading ?
       null :
-      <AccountForm postAccount={this.props.postAccount} total={this.props.total} utilityParams={this.props.utilityParams} flatId={this.props.flatId} tariffLimits={this.props.tariffLimits} />;
+      <AccountForm setValueCounter={this.props.setValueCounter} postAccount={this.props.postAccount} total={this.props.total} utilityParams={this.props.utilityParams} flatId={this.props.flatId} tariffLimits={this.props.tariffLimits} />;
     return(
       <div>
         <h3>Новый счет</h3>
@@ -61,6 +61,7 @@ class AccountsByFlat extends React.Component {
 }
 const mapDispatchToProps = dispatch => ({
   postAccount: (flatId, accountParams) => dispatch(postAccount(flatId, accountParams)),
+  setValueCounter: (utilityIndex, valueCounter, tariff) => dispatch(setValueCounter(utilityIndex, valueCounter, tariff)),
   fetchAccounts: (flatId) => dispatch(fetchAccounts(flatId))
 });
 const mapStateToProps = state => {

@@ -7,32 +7,25 @@ class AccountForm extends React.Component {
     super(props);
     let now = new Date();
     let month = now.getMonth()+1 < 10 ? '0'+(now.getMonth()+1) : now.getMonth()+1;
-    // this.startDate = now.getFullYear()+'-'+month+'-01'
-    // this.monthsNumber = 1;
-
     this.state = {
-      // utilityParams: this.props.utilityParams,
+      utilityParams: this.props.utilityParams,
       monthsNumber: 1,
       total: this.props.total,
       startDate: now.getFullYear()+'-'+month+'-01'
     };
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.dateChange = this.dateChange.bind(this);
-    this.numberChange = this.numberChange.bind(this);
     this.calcTotal = this.calcTotal.bind(this);
     this.updateCounterValue = this.updateCounterValue.bind(this);
   }
-  componentDidMount(){
-    this.calcTotal();
-  }
   updateCounterValue(utilityId, newValue, tariff){
-    this.props.utilityParams[utilityId].new_value_counter = +newValue;
-    this.props.utilityParams[utilityId].tariff = tariff;
+    // this.props.utilityParams[utilityId].new_value_counter = +newValue;
+    // this.props.utilityParams[utilityId].tariff = tariff;
+    this.props.setValueCounter(utilityId, newValue, tariff);
     this.calcTotal();
   }
   dateChange(e) {
     let firstDay = e.target.value.substr(0,8)+'01';
-    this.state.startDate = firstDay;
+    this.setState({startDate: firstDay});
   }
   numberChange(e){
     this.state.monthsNumber = +e.target.value;
@@ -51,11 +44,9 @@ class AccountForm extends React.Component {
       }else
         total += up.quantity*up.tariff*this.state.monthsNumber;
     });
-    // alert(total)
     this.setState({total: total});
   }
   render() {
-    // let total = +this.state.total > 0 ? this.state.total : this.props.total;
     return(
       <div>
         <form className="account-form" onSubmit={(event) => this.handleSubmit(event)}>
@@ -68,8 +59,8 @@ class AccountForm extends React.Component {
             </thead>
             <tbody>
               <tr>
-                <td><input type="date" name="input-date" value={this.state.startDate} onChange={this.dateChange} required={true} autoComplete="on" /></td>
-                <td><input type="number" value={this.state.monthsNumber} onChange={this.numberChange} name="input-number" min="1" step="1"/></td>
+                <td><input type="date" name="input-date" value={this.state.startDate} onChange={event => this.dateChange(event)} required={true} autoComplete="on" /></td>
+                <td><input type="number" value={this.state.monthsNumber} onChange={event => this.numberChange(event)} name="input-number" min="1" step="1"/></td>
               </tr>
             </tbody>
           </table>
@@ -98,8 +89,5 @@ class AccountForm extends React.Component {
     );
   }
 }
-// const mapStateToProps = state => {
-//   return {utilityParams: state.accounts.utilityParams, tariffLimits: state.accounts.tariffLimits, total: state.accounts.total, flatId: state.flatId};
-// }
 // export default connect(mapStateToProps)(AccountForm);
 export default AccountForm;
