@@ -1,6 +1,6 @@
 import * as ActionTypes from './actionTypes';
 
-const baseUrl = 'http://127.0.0.1:3000/';
+export const baseUrl = 'http://127.0.0.1:3000/';
 
 export const getCategory = (categoryId) => ({
   type: ActionTypes.GET_CATEGORY,
@@ -10,17 +10,43 @@ export const addUtility = (utility) => ({
   type:ActionTypes.ADD_UTILITY,
   payload: utility
 });
-export const postUtility = (flatId, utility) => (dispatch) => {
-  $.ajax({
-      type: 'POST',
-      url: "/flats/"+flatId+"/utilities/",
-      dataType: 'json',
-      data: {flat_id: flatId, utility: {category_id: utility.category.value, tariff_id: utility.tariff.value, description: utility.description, start_value_counter: utility.startCounterValue }},
-      }).done((data) => {
-        dispatch(addUtility(data.utility));
-      }).fail((res) => {
-        this.setState({errors: ["Ошибка записи в базу"]});
-      });
+export const postUtility = (flatId, utility) => dispatch => {
+  return fetch(baseUrl + 'flats/'+flatId+'/utilities/', {
+    method: "POST",
+    body: JSON.stringify({flat_id: flatId, utility: {category_id: utility.category.value, tariff_id: utility.tariff.value, description: utility.description, start_value_counter: utility.startCounterValue }}),
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: "same-origin"
+  })
+  .then(response => {
+      if (response.ok) {
+        return response;
+      } else {
+        var error = new Error('Error ' + response.status + ': ' + response.statusText);
+        error.response = response;
+        throw error;
+      }
+    },
+    error => {
+          throw error;
+    })
+  .then(response => response.json())
+  .then(response => dispatch(addUtility(response.utility)))
+  .catch(error =>  { console.log('post utilities', error.message); alert('Your utility could not be posted\nError: '+error.message); });
+
+
+
+  // $.ajax({
+  //     type: 'POST',
+  //     url: "/flats/"+flatId+"/utilities/",
+  //     dataType: 'json',
+  //     data: {flat_id: flatId, utility: {category_id: utility.category.value, tariff_id: utility.tariff.value, description: utility.description, start_value_counter: utility.startCounterValue }},
+  //     }).done((data) => {
+  //       dispatch(addUtility(data.utility));
+  //     }).fail((res) => {
+  //       this.setState({errors: ["Ошибка записи в базу"]});
+  //     });
 };
 export const fetchAccounts = (flatId) => (dispatch) => {
   dispatch(accountsLoading(true));
@@ -52,19 +78,47 @@ export const addAccount = (account) => ({
   payload: account
 });
 export const postAccount = (flatId, accountParams) => (dispatch) => {
-  $.ajax({
-      type: 'POST',
-      url: "/flats/"+flatId+"/accounts/",
-      dataType: 'json',
-      data: {account_data: {total: accountParams.total,
-                            monthsNumber: accountParams.monthsNumber,
-                            startDate: accountParams.startDate,
-                            utilityParams: accountParams.utilityParams}},
-      }).done((data) => {
-        dispatch(addAccount(data.account));
-      }).fail((res) => {
-        // dispatch(accountFailed("Ошибка при записи счета в базу"));
-      });
+  return fetch(baseUrl + 'flats/'+flatId+'/accounts/', {
+    method: "POST",
+    body: JSON.stringify({account_data: 
+      { total: accountParams.total,
+        monthsNumber: accountParams.monthsNumber,
+        startDate: accountParams.startDate,
+        utilityParams: accountParams.utilityParams}}),
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: "same-origin"
+  })
+  .then(response => {
+      if (response.ok) {
+        return response;
+      } else {
+        var error = new Error('Error ' + response.status + ': ' + response.statusText);
+        error.response = response;
+        throw error;
+      }
+    },
+    error => {
+          throw error;
+    })
+  .then(response => response.json())
+  .then(response => dispatch(addAccount(response.account)))
+  .catch(error =>  { console.log('post accounts', error.message); alert('Your account could not be posted\nError: '+error.message); });
+
+  // $.ajax({
+  //     type: 'POST',
+  //     url: "/flats/"+flatId+"/accounts/",
+  //     dataType: 'json',
+  //     data: {account_data: {total: accountParams.total,
+  //                           monthsNumber: accountParams.monthsNumber,
+  //                           startDate: accountParams.startDate,
+  //                           utilityParams: accountParams.utilityParams}},
+  //     }).done((data) => {
+  //       dispatch(addAccount(data.account));
+  //     }).fail((res) => {
+  //       // dispatch(accountFailed("Ошибка при записи счета в базу"));
+  //     });
 };
 export const setValueCounter = (utilityIndex, valueCounter, tariff) => ({
   type: ActionTypes.SET_VALUE_COUNTER,
@@ -91,25 +145,9 @@ export const addUtilities = (data) => ({
   payload: {utilities: data.utilities, categories: data.categories, tariffs: data.tariffs, flatId: data.flat_id, userId: data.user_id}
 });
 export const fetchTariffs = () => (dispatch) => {
-  $.ajax({
-      type: 'GET',
-      url: "/tariffs",
-      dataType: 'json',
-    }).done((data) => {
-      dispatch(addTariffs(data));
-    }).fail((res) => {
-      dispatch(tariffsFailed("Ошибка при чтении тарифов из базы"));
-    });
-    // return fetch('http://localhost:3000/tariffs',{
-  // method: 'POST', // or 'PUT'
-  // headers: {
-    // 'Content-Type': 'application/json',
-  // }
-  // body: JSON.stringify(data),
-// })
-    // .then(response => response.json())
-    // .then(tariffs => {alert(tariffs[0]); //dispatch(addTariffs(tariffs))
-    // });
+  return fetch(baseUrl + 'tariffs')
+    .then(response => response.json())
+    .then(data => dispatch(addTariffs(data)));
 };
 export const tariffsLoading = () => ({
   type: ActionTypes.TARIFFS_LOADING
@@ -123,15 +161,9 @@ export const addTariffs = (tariffs_categories) => ({
   payload: tariffs_categories
 });
 export const fetchCategories = () => (dispatch) => {
-  $.ajax({
-      type: 'GET',
-      url: "/categories",
-      dataType: 'json',
-    }).done((data) => {
-      dispatch(addCategories(data));
-    }).fail((res) => {
-      dispatch(tariffsFailed("Ошибка при чтении категорий из базы"));
-    });
+  return fetch(baseUrl + 'categories')
+    .then(response => response.json())
+    .then(data => dispatch(addCategories(data)));
 };
 export const categoriesLoading = () => ({
   type: ActionTypes.CATEGORIES_LOADING
@@ -144,18 +176,10 @@ export const addCategories = (categories) => ({
   type: ActionTypes.ADD_CATEGORIES,
   payload: categories
 });
-
 export const fetchFlats = (userId) => (dispatch) => {
-  $.ajax({
-      type: 'GET',
-      // url: `/users/${userId}`,
-      url: userId,
-      dataType: 'json',
-    }).done((data) => {
-      dispatch(addFlats(data));
-    }).fail((res) => {
-      dispatch(flatsFailed("Ошибка при чтении данных пользователя из базы"));
-    });
+  return fetch(baseUrl + 'users/'+userId)
+    .then(response => response.json())
+    .then(data => dispatch(addFlats(data)));
 };
 export const flatsLoading = () => ({
   type: ActionTypes.FLATS_LOADING

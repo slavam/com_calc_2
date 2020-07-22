@@ -15,11 +15,16 @@ const store = ConfigureStore();
 
 class App extends React.Component{
   render() {
+    // let homePage = this.props.userId > '' ?
+    //   <Route exact path='/users/:userId' component={() => <Flats userId={this.props.userId} />} /> :
+    //   <Route exact path='/tariffs' component={() => <TariffsByCategory />} />;
     return(
       <Provider store={store}>
         <BrowserRouter>
           <Switch>
             <Route path="/" exact component={() => <Home userId={this.props.userId}/>} />
+            <Route path="/logout" exact component={() => <Home userId={this.props.userId}/>} />
+            <Route path="/login" exact component={() => <Home userId={this.props.userId}/>} />
             <Route exact path='/users/:userId' component={() => <Flats userId={this.props.userId} />} />
             <Route exact path='/categories' component={() => <Categories />} />
             <Route exact path='/tariffs' component={() => <TariffsByCategory />} />
@@ -36,7 +41,13 @@ export default withRouter(connect(null)(App));
 document.addEventListener('turbolinks:load', () => {
   const app = document.getElementById('root');
   if(app){
-    let userId = JSON.parse(app.getAttribute('userId'));
+    // let allowCrossDomain = function(req, res, next) {
+    //   res.header('Access-Control-Allow-Origin', "*");
+    //   res.header('Access-Control-Allow-Headers', "*");
+    //   next();
+    // }
+    // app.use(allowCrossDomain);
+    let userId = app.hasAttribute('userId') ? JSON.parse(app.getAttribute('userId')) : '';
     ReactDOM.render(<App userId={userId}/>, app);
   }
 });

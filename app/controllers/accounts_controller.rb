@@ -1,4 +1,5 @@
 class AccountsController < ApplicationController
+  skip_before_action :verify_authenticity_token
   before_action :set_flat, only: [:index, :new, :create, :show, :edit, :update, :destroy]
   before_action :set_account, only: [:show, :edit, :update, :destroy]
 
@@ -44,17 +45,16 @@ class AccountsController < ApplicationController
     @account = @flat.accounts.build(start_date: params[:account_data][:startDate],
       months_number: months_number,
       total: params[:account_data][:total])
-
+    utilities = params[:account_data][:utilityParams]
     if @account.save
-      params[:account_data][:utilityParams].each {|key, v|
-        v.delete(:category_id)
-        v.delete(:category_name)
-        v.delete(:is_variable_tariff)
-        p = @account.payments.build(payment_params(v))
+      utilities.each {|u_p|
+        u_p.delete(:category_id)
+        u_p.delete(:category_name)
+        u_p.delete(:is_variable_tariff)
+        p = @account.payments.build(payment_params(u_p))
         p.quantity = p[:new_value_counter].to_f-p[:old_value_counter].to_f if p[:is_counter]
         p.amount = p[:tariff].to_f*p[:quantity].to_f*(p[:is_counter] ? 1 : months_number)
         if p.save
-          # Rails.logger.debug("My object>>>>>>>>>>>>>>>: #{p.inspect}")
           if p[:is_counter]
             utility = Utility.find(p.utility_id)
             utility.update(last_value_counter: p[:new_value_counter])

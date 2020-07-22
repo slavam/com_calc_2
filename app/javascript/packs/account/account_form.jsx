@@ -1,6 +1,5 @@
 import React from 'react';
 import AccountLine from './account_line';
-import {connect} from 'react-redux';
 
 class AccountForm extends React.Component {
   constructor(props) {
@@ -18,8 +17,6 @@ class AccountForm extends React.Component {
     this.updateCounterValue = this.updateCounterValue.bind(this);
   }
   updateCounterValue(utilityId, newValue, tariff){
-    // this.props.utilityParams[utilityId].new_value_counter = +newValue;
-    // this.props.utilityParams[utilityId].tariff = tariff;
     this.props.setValueCounter(utilityId, newValue, tariff);
     this.calcTotal();
   }
@@ -48,46 +45,59 @@ class AccountForm extends React.Component {
   }
   render() {
     return(
-      <div>
-        <form className="account-form" onSubmit={(event) => this.handleSubmit(event)}>
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th>Начало периода</th>
-                <th>Количество месяцев</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><input type="date" name="input-date" value={this.state.startDate} onChange={event => this.dateChange(event)} required={true} autoComplete="on" /></td>
-                <td><input type="number" value={this.state.monthsNumber} onChange={event => this.numberChange(event)} name="input-number" min="1" step="1"/></td>
-              </tr>
-            </tbody>
-          </table>
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th>Категория</th>
-                <th>Сумма</th>
-                <th>Тариф</th>
-                <th>Количество</th>
-                <th>Было</th>
-                <th>Стало</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.props.utilityParams.map((utilityParams, i) => {
-                let tariffLimits= this.props.tariffLimits[utilityParams.category_id];
-                return <AccountLine key={utilityParams.utility_id} utilityParams={utilityParams} utilityId={i} tariffLimits={tariffLimits} monthsNumber={this.state.monthsNumber} onUtilitySubmit={this.updateCounterValue}/>;
-              })}
-              <tr key="0"><td><b>Итого</b></td><td className="total"><b>{(+this.state.total).toFixed(2)}</b></td></tr>
-            </tbody>
-          </table>
-          <input type="submit" value="Сохранить" />
-        </form>
+      <div className='container'>
+        <div className='row row-content'>
+          <div className='col-12'>
+            <h3>Новый счет</h3>
+          </div>
+          <div className='col-12 col-md-9'>
+            <form className="account-form" onSubmit={(event) => this.handleSubmit(event)}>
+              <div className='form-group row'>
+                <label htmlFor='start-date' className='col-md-3 col-form-label'>Начало периода</label>
+                <div className='col-md-3'>
+                  <input className="form-control" type="date" id='start-date' name="input-date" value={this.state.startDate} onChange={event => this.dateChange(event)} required={true} autoComplete="on" />
+                </div>
+              </div>
+              <div className='form-group row'>
+                <label htmlFor='number-months' className='col-md-3 col-form-label'>Количество месяцев</label>
+                <div className='col-md-3'>
+                  <input className="form-control" id='number-months' type="number" value={this.state.monthsNumber} onChange={event => this.numberChange(event)} name="input-number" min="1" step="1"/>
+                </div>
+              </div>
+              <div className='table-responsive'>
+                <table className='table table-striped'>
+                  <thead className='thead-dark'>
+                    <tr>
+                      <th>Категория</th>
+                      <th>Сумма</th>
+                      <th>Тариф</th>
+                      <th>Количество</th>
+                      <th>Было</th>
+                      <th>Стало</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.props.utilityParams.map((utilityParams, i) => {
+                      let tariffLimits= this.props.tariffLimits[utilityParams.category_id];
+                      return <AccountLine key={utilityParams.utility_id} utilityParams={utilityParams} utilityId={i} tariffLimits={tariffLimits} monthsNumber={this.state.monthsNumber} onUtilitySubmit={this.updateCounterValue}/>;
+                    })}
+                    <tr key="0"><td><b>Итого</b></td><td className="total"><b>{(+this.state.total).toFixed(2)}</b></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <div className='form-group row'>
+                <div className='col-md-12'>
+                  <button type='submit' className='btn btn-primary'>
+                    Сохранить
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     );
   }
 }
-// export default connect(mapStateToProps)(AccountForm);
 export default AccountForm;

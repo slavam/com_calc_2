@@ -1,2 +1,5 @@
-
-<div id="root" userId="<%= current_user.id %>"></div>
+<% if current_user.present? %>
+    <div id="root" userId="<%= current_user.id %>"></div>
+<% else %>
+    <div id="root" ></div>
+<% end %>

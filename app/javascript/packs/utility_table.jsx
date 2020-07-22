@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Loading } from './loadingComponent';
+import { baseUrl } from './redux/ActionCreators';
 
 class UtilityTable extends React.Component {
   constructor(props) {
@@ -9,14 +10,27 @@ class UtilityTable extends React.Component {
   }
   handleDeleteClick(e) {
     e.preventDefault();
-    $.ajax({
-      type: 'DELETE',
-      url: "/flats/"+this.props.flatId+"/utilities/"+e.target.id
-    }).done(function(data){
-      this.props.fetchUtilities(this.props.flatId);
-    }.bind(this))
-    .fail(function(res){});
-
+    return fetch(baseUrl + 'flats/'+this.props.flatId+'/utilities/'+e.target.id, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      credentials: "same-origin"
+    })
+    .then(response => {
+        if (response.ok) {
+          return response;
+        } else {
+          var error = new Error('Error ' + response.status + ': ' + response.statusText);
+          error.response = response;
+          throw error;
+        }
+      },
+      error => {
+            throw error;
+      })
+    .then(this.props.fetchUtilities(this.props.flatId))
+    .catch(error =>  { console.log('delete utilities', error.message); alert('Your utility could not be deleted\nError: '+error.message); });
   }
   render(){
     if(this.props.isLoading){
@@ -36,63 +50,51 @@ class UtilityTable extends React.Component {
         </div>
       );
     }else return(
-      <div>
-        <table className='table table-bordered'>
-          <thead>
-            <tr>
-              <th>Категория</th>
-              <th>Тариф</th>
-              <th>Описание</th>
-              <th>По счетчику?</th>
-              <th>Показания при установке</th>
-              <th>Последние показания</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-              {this.props.utilities.map((u) => {
-                let deleteLink = <input id={u.id} type="submit" value="Удалить" onClick={event => this.handleDeleteClick(event)}/>;
-                var category;
-                this.props.categories.some(cat => {category = cat; return cat.id == u.category_id;});
-                var tariff;
-                this.props.tariffs.some(tar => {tariff = tar; return tar.id == u.tariff_id;});
+      <div className='container'> 
+        <div className='row row-content'>
+          <div className='col-12'>
+            <h3>Список услуг. Всего услуг - {this.props.utilities.length}</h3>
+            <div className='table-responsive'>
+              <table className='table table-striped'>
+                <thead className='thead-dark'>
+                  <tr>
+                    <th>Категория</th>
+                    <th>Тариф</th>
+                    <th>Описание</th>
+                    <th>По счетчику?</th>
+                    <th>Показания при установке</th>
+                    <th>Последние показания</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.props.utilities.map((u) => {
+                    let deleteLink = <input id={u.id} type="submit" value="Удалить" onClick={event => this.handleDeleteClick(event)}/>;
+                    var category;
+                    this.props.categories.some(cat => {category = cat; return cat.id == u.category_id;});
+                    var tariff;
+                    this.props.tariffs.some(tar => {tariff = tar; return tar.id == u.tariff_id;});
 
-                return <tr key={u.id}>
-                    <td>{category.name}</td>
-                    <td>{category.is_variable_tariff ? 'Тариф зависит от количества' : tariff.value}</td>
-                    <td>{u.description}</td>
-                    <td>{category.is_counter ? 'Да':'Нет'}</td>
-                    <td>{category.is_counter ? u.start_value_counter : ''}</td>
-                    <td>{category.is_counter ? u.last_value_counter : ''}</td>
-                    <td>{deleteLink}</td>
-                  </tr>;
-              })
-            }
-          </tbody>
-        </table>
+                    return <tr key={u.id}>
+                        <td>{category.name}</td>
+                        <td>{category.is_variable_tariff ? 'Тариф зависит от количества' : tariff.value}</td>
+                        <td>{u.description}</td>
+                        <td>{category.is_counter ? 'Да':'Нет'}</td>
+                        <td>{category.is_counter ? u.start_value_counter : ''}</td>
+                        <td>{category.is_counter ? u.last_value_counter : ''}</td>
+                        <td>{deleteLink}</td>
+                      </tr>;
+                    })
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        
       </div>
     );
   }
 }
 export default connect(null)(UtilityTable);
-// const handleDeleteClick = (e) => {
-//   e.preventDefault();
-//   // props.deleteUtility(e.target.id);
-//   $.ajax({
-//     type: 'DELETE',
-//     url: "/flats/1/utilities/"+e.target.id
-//     // url: "/utilities/"+e.target.id
-//   }).done(function(data){
-//     alert(data.message);
-//     // dispatch(addUtilities(data));
-//     // this.setState({utilities: data.utilities});
-//   }.bind(this))
-//   .fail(function(res){});
-//   props.fetchUtilities(props.flatId);
-//   // this.props.onDeleteUtility(e.target.id);
-// };
-// }
-// const mapStateToProps = state => {
-//   return {isLoading: state.utilities.isLoading, errMes: state.utilities.errMes, categories: state.tariffs.categories, tariffs: state.tariffs.tariffs, utilities: state.utilities.utilities, flatId: state.utilities.flatId};
-// }
-// export default connect(mapStateToProps)(UtilityTable);
+

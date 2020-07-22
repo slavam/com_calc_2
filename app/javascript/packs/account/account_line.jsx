@@ -18,7 +18,6 @@ export default class AccountLine extends React.Component{
       tariff = this.props.utilityParams.tariff;
     this.setState({valueCounter: +e.target.value, quantity: quantity.toFixed(2), tariff: tariff});
     this.props.onUtilitySubmit(this.props.utilityId, e.target.value, tariff);
-    // this.props.setValueCounter(this.props.utilityId, e.target.value, tariff);
   }
   render(){
     let sum = this.state.quantity*this.state.tariff*(this.props.utilityParams.is_counter ? 1 : this.props.monthsNumber);

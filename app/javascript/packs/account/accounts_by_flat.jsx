@@ -9,9 +9,6 @@ import { connect } from "react-redux";
 import { postAccount, setValueCounter, fetchAccounts } from '../redux/ActionCreators';
 
 class AccountsByFlat extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  // }
   componentDidMount(){
     const { flatId } = this.props.match.params;
     this.props.fetchAccounts(flatId);
@@ -25,24 +22,14 @@ class AccountsByFlat extends React.Component {
   //   }.bind(this))
   //   .fail(function(res){});
   // }
-  // createAccount(accountParams){
-  //   $.ajax({
-  //     type: 'POST',
-  //     dataType: 'json',
-  //     data: {flat_id: this.props.flatId, account_data: accountParams},
-  //     }).done((data) => {
-  //       this.setState({accounts: data.accounts});
-  //     }).fail((res) => {
-  //       this.setState({errors: ["Ошибка записи в базу"]});
-  //     });
-  // }
+  
   render() {
     let formIs = this.props.isLoading ?
       null :
       <AccountForm setValueCounter={this.props.setValueCounter} postAccount={this.props.postAccount} total={this.props.total} utilityParams={this.props.utilityParams} flatId={this.props.flatId} tariffLimits={this.props.tariffLimits} />;
     return(
       <div>
-        <h3>Новый счет</h3>
+        <Link to="/" className="btn btn-link">Home</Link>
         {formIs}
         <h3>Список счетов</h3>
         <AccountTable />

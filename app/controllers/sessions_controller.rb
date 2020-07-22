@@ -8,7 +8,8 @@ class SessionsController < ApplicationController
       # Log the user in and redirect to the user's show page.
       log_in user
       # remember user
-      redirect_to user
+      # redirect_to user
+      redirect_to root_url 
     else
       flash.now[:danger] = 'Ошибочная login/password комбинация'
       render 'new'
@@ -17,6 +18,6 @@ class SessionsController < ApplicationController
   
   def destroy
     log_out
-    redirect_to login_path #root_url
+    redirect_to root_url #login_path #root_url
   end
 end

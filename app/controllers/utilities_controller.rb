@@ -1,4 +1,5 @@
 class UtilitiesController < ApplicationController
+  skip_before_action :verify_authenticity_token
   before_action :set_flat, only: [:index, :new, :create, :show, :edit, :update, :destroy]
   before_action :set_utility, only: [:show, :edit, :update, :destroy]
 
@@ -6,7 +7,6 @@ class UtilitiesController < ApplicationController
     @utilities = @flat.utilities.order(:id)
     @categories = Category.active_categories
     @tariffs = Tariff.all
-    # puts ">>>>>>>#{@flat.id}<<<<<<<<<"
     render json: {utilities: @utilities, tariffs: @tariffs, categories: @categories, flat_id: @flat.id, user_id: current_user.id}
     # respond_to do |format|
     #   format.html
@@ -24,7 +24,6 @@ class UtilitiesController < ApplicationController
 
     if @utility.save
       render json: {utility: @utility}
-      # render json: {utilities: @flat.utilities.order(:id)}
     else
       render json: @utility.errors, status: :unprocessable_entity
     end
@@ -33,13 +32,6 @@ class UtilitiesController < ApplicationController
   def destroy
     @utility&.destroy
     render json: {message: 'Услуга удалена'}
-    # flash[:success] = "Услуга удалена"
-    # render json: {utilities: @flat.utilities.order(:id)}
-    # utilities = @flat.utilities.order(:id)
-    # @categories = Category.active_categories
-    # @tariffs = Tariff.all
-    # puts ">>>>>>>#{@flat.id}<<<<<<<<<"
-    # render json: {utilities: @utilities, tariffs: @tariffs, categories: @categories, flat_id: @flat.id, user_id: current_user.id}
   end
 
   private

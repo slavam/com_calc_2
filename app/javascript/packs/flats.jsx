@@ -11,9 +11,9 @@ class Flats extends React.Component {
     const allFlats = this.props.flats.map((flat, index) => (
       <div key={index} className="col-md-6 col-lg-4">
         <div className="card mb-4">
-          <div className="card-body">
-            <h5 className="card-title">Адрес: {flat.address}</h5>
-            <p>Плательщик {flat.payer_lastname}</p>
+          <h5 className="card-header bg-primary text-white">Адрес: {flat.address}</h5>
+          <div className='card-body bg-light'>
+            <p>Плательщик: {flat.payer_lastname}</p>
             <Link to={`/flats/${flat.id}/utilities`} className="btn btn-link">
               Услуги
             </Link>
@@ -25,17 +25,19 @@ class Flats extends React.Component {
       </div>
     ));
     return (
-      <div>
-        <h2 className="display-4">Жилье пользователя {this.props.user ? this.props.user.last_name : ''}</h2>
-        <div className="py-5">
-          <main className="container">
-            <div className="row">
-              { allFlats }
-            </div>
-            <Link to="/" className="btn btn-link">
-              Home
-            </Link>
-          </main>
+      <div className='container'>
+        <div className='col-12'>
+          <h2>Жилье пользователя {this.props.user ? this.props.user.last_name : ''}</h2>
+          <div className="py-5">
+            <main className="container">
+              <div className="row row-content">
+                { allFlats }
+              </div>
+              <Link to="/" className="btn btn-link">
+                Home
+              </Link>
+            </main>
+          </div>
         </div>
       </div>
     );
