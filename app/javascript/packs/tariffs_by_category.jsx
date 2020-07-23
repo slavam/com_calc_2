@@ -4,6 +4,7 @@ import Select from 'react-select';
 import TariffTable from './tariff_table';
 import {connect} from 'react-redux';
 import { getCategory, fetchTariffs } from './redux/ActionCreators';
+import { Loading } from './loadingComponent';
 
 class TariffsByCategory extends React.Component {
   constructor(props) {
@@ -16,15 +17,18 @@ class TariffsByCategory extends React.Component {
   }
   componentDidMount() {
     this.props.fetchTariffs();
-    this.props.categories.map((c) => {
-      this.categories.push({value: c.id, label: c.name});
-    });
   }
   handleCategorySelected(category){
     this.setState({category});
     this.props.getCategory(category.value);
   }
   render() {
+    if(!this.props.isLoading){
+      this.categories = [];
+      this.props.categories.map((c) => {
+        this.categories.push({value: c.id, label: c.name});
+      });
+    };
     let formIs = this.props.isLoading ?
       null :
       <div>
@@ -32,11 +36,24 @@ class TariffsByCategory extends React.Component {
         <Select value={this.state.category} onChange={this.handleCategorySelected} options={this.categories}/>
         <TariffTable />
       </div>;
-    // this.props.categories.map((c) => {
-    //   this.categories.push({value: c.id, label: c.name});
-    // });
-
-    return(
+    
+    if(this.props.isLoading){
+      return(
+        <div className="container">
+          <div className="row">
+            <Loading />
+          </div>
+        </div>
+      );
+    }else if(this.props.errMes){
+      return(
+        <div className="container">
+          <div className="row">
+            <h4>{this.props.errMes}</h4>
+          </div>
+        </div>
+      );
+    }else return(
       <div>
         <nav className='navbar navbar-dark navbar-expand-sm fixed-top'>
           <div className='container'>
@@ -77,7 +94,7 @@ class TariffsByCategory extends React.Component {
               <li className="breadcrumb-item active">Тарифы</li>
             </ol>
           </div>
-          
+          {formIs}
         </div>
       </div>
     );
@@ -89,6 +106,6 @@ const mapDispatchToProps = dispatch => ({
 });
 const mapStateToProps = state => {
   return {categories: state.tariffs.categories,
-          isLoading: state.utilities.isLoading};
+          isLoading: state.tariffs.isLoading};
 };
 export default connect(mapStateToProps, mapDispatchToProps)(TariffsByCategory);

@@ -13,7 +13,16 @@ class Flats extends React.Component {
         <div className="card mb-4">
           <h5 className="card-header bg-primary text-white">Адрес: {flat.address}</h5>
           <div className='card-body bg-light'>
-            <p>Плательщик: {flat.payer_lastname}</p>
+            <dl className="row">
+              <dt className="col-6">Плательщик</dt>
+              <dd className="col-6">{flat.payer_lastname}</dd>
+              <dt className="col-6">Проживающих</dt>
+              <dd className="col-6">{flat.residents_number}</dd>
+              <dt className="col-6">Общая площадь</dt>
+              <dd className="col-6">{flat.total_area}</dd>
+              <dt className="col-6">Отапливаемая площадь</dt>
+              <dd className="col-6">{flat.heated_area}</dd>
+            </dl>
             <Link to={`/flats/${flat.id}/utilities`} className="btn btn-link">
               Услуги
             </Link>

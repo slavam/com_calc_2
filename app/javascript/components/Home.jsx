@@ -77,9 +77,6 @@ class Home extends React.Component{
               <Link to="/categories" className="btn btn-link">
                 Категории услуг
               </Link>
-              {/*<Link to={`/users/${props.userId}`} className="btn btn-link">
-                Жилье
-              </Link>*/}
             </div>
           </div>
         </div>

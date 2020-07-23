@@ -145,6 +145,8 @@ export const addUtilities = (data) => ({
   payload: {utilities: data.utilities, categories: data.categories, tariffs: data.tariffs, flatId: data.flat_id, userId: data.user_id}
 });
 export const fetchTariffs = () => (dispatch) => {
+  dispatch(tariffsLoading(true));
+
   return fetch(baseUrl + 'tariffs')
     .then(response => response.json())
     .then(data => dispatch(addTariffs(data)));
@@ -160,7 +162,8 @@ export const addTariffs = (tariffs_categories) => ({
   type: ActionTypes.ADD_TARIFFS,
   payload: tariffs_categories
 });
-export const fetchCategories = () => (dispatch) => {
+export const fetchCategories = () => dispatch => {
+  dispatch(categoriesLoading(true));
   return fetch(baseUrl + 'categories')
     .then(response => response.json())
     .then(data => dispatch(addCategories(data)));
