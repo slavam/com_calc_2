@@ -10,6 +10,29 @@ export const addUtility = (utility) => ({
   type:ActionTypes.ADD_UTILITY,
   payload: utility
 });
+export const removeUtility = (flatId, utilityId) => dispatch => {
+  return fetch(baseUrl + 'flats/'+flatId+'/utilities/'+utilityId, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: "same-origin"
+  })
+  .then(response => {
+      if (response.ok) {
+        return response;
+      } else {
+        var error = new Error('Error ' + response.status + ': ' + response.statusText);
+        error.response = response;
+        throw error;
+      }
+    },
+    error => {
+      throw error;
+    })
+  .then(dispatch(fetchUtilities(flatId)))
+  .catch(error =>  { console.log('delete utilities', error.message); alert('Your utility could not be deleted\nError: '+error.message); });
+};
 export const postUtility = (flatId, utility) => dispatch => {
   return fetch(baseUrl + 'flats/'+flatId+'/utilities/', {
     method: "POST",
@@ -34,19 +57,6 @@ export const postUtility = (flatId, utility) => dispatch => {
   .then(response => response.json())
   .then(response => dispatch(addUtility(response.utility)))
   .catch(error =>  { console.log('post utilities', error.message); alert('Your utility could not be posted\nError: '+error.message); });
-
-
-
-  // $.ajax({
-  //     type: 'POST',
-  //     url: "/flats/"+flatId+"/utilities/",
-  //     dataType: 'json',
-  //     data: {flat_id: flatId, utility: {category_id: utility.category.value, tariff_id: utility.tariff.value, description: utility.description, start_value_counter: utility.startCounterValue }},
-  //     }).done((data) => {
-  //       dispatch(addUtility(data.utility));
-  //     }).fail((res) => {
-  //       this.setState({errors: ["Ошибка записи в базу"]});
-  //     });
 };
 export const fetchAccounts = (flatId) => (dispatch) => {
   dispatch(accountsLoading(true));
@@ -91,34 +101,20 @@ export const postAccount = (flatId, accountParams) => (dispatch) => {
     credentials: "same-origin"
   })
   .then(response => {
-      if (response.ok) {
-        return response;
-      } else {
-        var error = new Error('Error ' + response.status + ': ' + response.statusText);
-        error.response = response;
-        throw error;
-      }
-    },
-    error => {
-          throw error;
-    })
+    if (response.ok) {
+      return response;
+    } else {
+      var error = new Error('Error ' + response.status + ': ' + response.statusText);
+      error.response = response;
+      throw error;
+    }
+  },
+  error => {
+    throw error;
+  })
   .then(response => response.json())
   .then(response => dispatch(addAccount(response.account)))
   .catch(error =>  { console.log('post accounts', error.message); alert('Your account could not be posted\nError: '+error.message); });
-
-  // $.ajax({
-  //     type: 'POST',
-  //     url: "/flats/"+flatId+"/accounts/",
-  //     dataType: 'json',
-  //     data: {account_data: {total: accountParams.total,
-  //                           monthsNumber: accountParams.monthsNumber,
-  //                           startDate: accountParams.startDate,
-  //                           utilityParams: accountParams.utilityParams}},
-  //     }).done((data) => {
-  //       dispatch(addAccount(data.account));
-  //     }).fail((res) => {
-  //       // dispatch(accountFailed("Ошибка при записи счета в базу"));
-  //     });
 };
 export const setValueCounter = (utilityIndex, valueCounter, tariff) => ({
   type: ActionTypes.SET_VALUE_COUNTER,

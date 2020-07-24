@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from "react-router-dom";
-import { Router, Route, browserHistory, IndexRoute} from 'react-router';
-import {syncHistoryWithStore, routerReducer} from 'react-router-redux';
 import AccountForm from './account_form';
 import AccountTable from './account_table';
 import { connect } from "react-redux";
 import { postAccount, setValueCounter, fetchAccounts } from '../redux/ActionCreators';
+import { Loading } from '../loadingComponent';
 
 class AccountsByFlat extends React.Component {
   componentDidMount(){
@@ -24,14 +23,32 @@ class AccountsByFlat extends React.Component {
   // }
   
   render() {
-    let formIs = this.props.isLoading ?
-      null :
-      <AccountForm setValueCounter={this.props.setValueCounter} postAccount={this.props.postAccount} total={this.props.total} utilityParams={this.props.utilityParams} flatId={this.props.flatId} tariffLimits={this.props.tariffLimits} />;
-    return(
+    if(this.props.isLoading){
+      return(
+        <div className="container">
+          <div className="row">
+            <Loading />
+          </div>
+        </div>
+      );
+    }else if(this.props.errMes){
+      return(
+        <div className="container">
+          <div className="row">
+            <h4>{this.props.errMes}</h4>
+          </div>
+        </div>
+      );
+    }else return(
       <div>
-        <Link to="/" className="btn btn-link">Home</Link>
-        {formIs}
-        <h3>Список счетов</h3>
+        <div className='row'>
+          <ol className="col-12 breadcrumb">
+            <li><Link to="/" className="btn btn-link">Home</Link></li>
+            <li><Link to={`/users/${this.props.userId}`} className="btn btn-link">Жилье</Link></li>
+            <li><Link to={`/flats/${this.props.flatId}/accounts`} className="btn btn-link">Счета</Link></li>
+          </ol>
+        </div>
+        <AccountForm setValueCounter={this.props.setValueCounter} postAccount={this.props.postAccount} total={this.props.total} utilityParams={this.props.utilityParams} flatId={this.props.flatId} tariffLimits={this.props.tariffLimits} />
         <AccountTable />
         <Link to="/" className="btn btn-link">
           Home

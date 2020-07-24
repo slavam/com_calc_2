@@ -12,13 +12,18 @@ import { connect } from "react-redux";
 //   render() {
 //     return(
 const AccountTable = ({accounts, flatId}) =>(
-  <div>
-    {
-      accounts.map((a) => {
-        let desiredLink = "/flats/"+flatId+"/accounts/"+a.id;
-        return <li className='account-list' key={a.id}><span className="account" ><a href={desiredLink}>С {a.start_date} за {a.months_number} мес. начислено {a.total}</a></span></li>;
-      })
-    }
+  <div className='container'> 
+    <div className='row row-content'>
+      <div className='col-12'>
+        <h3>Список счетов</h3>
+        {
+          accounts.map((a) => {
+            let desiredLink = "/flats/"+flatId+"/accounts/"+a.id;
+            return <li key={a.id}><span><a href={desiredLink}>С {a.start_date} за {a.months_number} мес. начислено {a.total}</a></span></li>;
+          })
+        }
+      </div>
+    </div>
   </div>
 );
 const mapStateToProps = state => {

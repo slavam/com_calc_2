@@ -1,12 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Link } from "react-router-dom";
-import { Router, Route, browserHistory, IndexRoute} from 'react-router';
-import {syncHistoryWithStore, routerReducer} from 'react-router-redux';
 import UtilityForm from './utility_form';
 import UtilityTable from './utility_table';
 import { connect } from "react-redux";
-import { postUtility, fetchUtilities } from './redux/ActionCreators';
+import { removeUtility, postUtility, fetchUtilities } from './redux/ActionCreators';
+import { Loading } from './loadingComponent';
 
 class UtilitiesByFlat extends React.Component {
   constructor(props) {
@@ -17,13 +15,33 @@ class UtilitiesByFlat extends React.Component {
     this.props.fetchUtilities(flatId);
   }
   render() {
-    let formIs = this.props.isLoading ?
-      null :
-      <UtilityForm postUtility={this.props.postUtility} categories={this.props.categories} tariffs={this.props.tariffs} flatId={this.props.flatId}/>
-    return(
+    if(this.props.isLoading){
+      return(
+        <div className="container">
+          <div className="row">
+            <Loading />
+          </div>
+        </div>
+      );
+    }else if(this.props.errMes){
+      return(
+        <div className="container">
+          <div className="row">
+            <h4>{this.props.errMes}</h4>
+          </div>
+        </div>
+      );
+    }else return(
       <div>
-        {formIs}
-        <UtilityTable fetchUtilities={this.props.fetchUtilities} errMes={this.props.errMes} isLoading={this.props.isLoading} utilities={this.props.utilities} categories={this.props.categories} tariffs={this.props.tariffs} flatId={this.props.flatId}/>
+        <div className='row'>
+          <ol className="col-12 breadcrumb">
+            <li><Link to="/" className="btn btn-link">Home</Link></li>
+            <li><Link to={`/users/${this.props.userId}`} className="btn btn-link">Жилье</Link></li>
+            <li><Link to={`/flats/${this.props.flatId}/utilities`} className="btn btn-link">Услуги</Link></li>
+          </ol>
+        </div>
+        <UtilityForm postUtility={this.props.postUtility} categories={this.props.categories} tariffs={this.props.tariffs} flatId={this.props.flatId}/>
+        <UtilityTable removeUtility={this.props.removeUtility} fetchUtilities={this.props.fetchUtilities} errMes={this.props.errMes} isLoading={this.props.isLoading} utilities={this.props.utilities} categories={this.props.categories} tariffs={this.props.tariffs} flatId={this.props.flatId}/>
         <Link to="/" className="btn btn-link">
           Home
         </Link>
@@ -39,6 +57,7 @@ class UtilitiesByFlat extends React.Component {
 }
 const mapDispatchToProps = dispatch => ({
   postUtility: (flatId, utility) => dispatch(postUtility(flatId, utility)),
+  removeUtility: (flatId, utilityId) => dispatch(removeUtility(flatId, utilityId)),
   fetchUtilities: (flatId) => dispatch(fetchUtilities(flatId))
 });
 const mapStateToProps = state => {

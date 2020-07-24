@@ -1,7 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Loading } from './loadingComponent';
-import { baseUrl } from './redux/ActionCreators';
 
 class UtilityTable extends React.Component {
   constructor(props) {
@@ -10,46 +8,10 @@ class UtilityTable extends React.Component {
   }
   handleDeleteClick(e) {
     e.preventDefault();
-    return fetch(baseUrl + 'flats/'+this.props.flatId+'/utilities/'+e.target.id, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      credentials: "same-origin"
-    })
-    .then(response => {
-        if (response.ok) {
-          return response;
-        } else {
-          var error = new Error('Error ' + response.status + ': ' + response.statusText);
-          error.response = response;
-          throw error;
-        }
-      },
-      error => {
-            throw error;
-      })
-    .then(this.props.fetchUtilities(this.props.flatId))
-    .catch(error =>  { console.log('delete utilities', error.message); alert('Your utility could not be deleted\nError: '+error.message); });
+    this.props.removeUtility(this.props.flatId, e.target.id);
   }
   render(){
-    if(this.props.isLoading){
-      return(
-        <div className="container">
-          <div className="row">
-            <Loading />
-          </div>
-        </div>
-      );
-    }else if(this.props.errMes){
-      return(
-        <div className="container">
-          <div className="row">
-            <h4>{this.props.errMes}</h4>
-          </div>
-        </div>
-      );
-    }else return(
+    return(
       <div className='container'> 
         <div className='row row-content'>
           <div className='col-12'>
