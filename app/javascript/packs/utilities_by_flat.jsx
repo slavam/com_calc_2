@@ -5,11 +5,10 @@ import UtilityTable from './utility_table';
 import { connect } from "react-redux";
 import { removeUtility, postUtility, fetchUtilities } from './redux/ActionCreators';
 import { Loading } from './loadingComponent';
+import MyHeader from '../components/my_header';
+import Footer from '../components/footer';
 
 class UtilitiesByFlat extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   componentDidMount(){
     const { flatId } = this.props.match.params;
     this.props.fetchUtilities(flatId);
@@ -33,6 +32,7 @@ class UtilitiesByFlat extends React.Component {
       );
     }else return(
       <div>
+        <MyHeader userId={this.props.userId} />
         <div className='row'>
           <ol className="col-12 breadcrumb">
             <li><Link to="/" className="btn btn-link">Home</Link></li>
@@ -51,6 +51,7 @@ class UtilitiesByFlat extends React.Component {
         <Link to={`/flats/${this.props.flatId}/accounts`} className="btn btn-link">
           Счета
         </Link>
+        <Footer />
       </div>
     );
   }

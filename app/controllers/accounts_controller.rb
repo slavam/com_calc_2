@@ -5,6 +5,10 @@ class AccountsController < ApplicationController
 
   def show
     respond_to do |format|
+      format.json do
+        payments = @account.payments
+        render json: {account: @account, payments: payments}
+      end
       format.html
       format.pdf do
         pdf = Invoice.new(@flat, @account)

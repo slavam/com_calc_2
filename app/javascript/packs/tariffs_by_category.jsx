@@ -1,42 +1,30 @@
 import React from 'react';
-import { Link } from "react-router-dom";
 import Select from 'react-select';
 import TariffTable from './tariff_table';
 import {connect} from 'react-redux';
 import { getCategory, fetchTariffs } from './redux/ActionCreators';
 import { Loading } from './loadingComponent';
+import Footer from '../components/footer';
+import MyHeader from '../components/my_header';
 
 class TariffsByCategory extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      category: {value: 1, label: 'Квартплата'}//{value: this.props.categories[0].id, label: this.props.categories[0].name}
+      category: {value: 1, label: 'Квартплата'} 
     };
     this.categories = [];
     this.handleCategorySelected = this.handleCategorySelected.bind(this);
   }
   componentDidMount() {
     this.props.fetchTariffs();
+    this.props.getCategory(this.state.category.value);
   }
   handleCategorySelected(category){
     this.setState({category});
     this.props.getCategory(category.value);
   }
   render() {
-    if(!this.props.isLoading){
-      this.categories = [];
-      this.props.categories.map((c) => {
-        this.categories.push({value: c.id, label: c.name});
-      });
-    };
-    let formIs = this.props.isLoading ?
-      null :
-      <div>
-        <h3>Категория</h3>
-        <Select value={this.state.category} onChange={this.handleCategorySelected} options={this.categories}/>
-        <TariffTable />
-      </div>;
-    
     if(this.props.isLoading){
       return(
         <div className="container">
@@ -53,51 +41,31 @@ class TariffsByCategory extends React.Component {
           </div>
         </div>
       );
-    }else return(
-      <div>
-        <nav className='navbar navbar-dark navbar-expand-sm fixed-top'>
+    }else{
+      this.categories = [];
+      this.props.categories.map((c) => {
+        this.categories.push({value: c.id, label: c.name});
+      });
+      return(
+        <div>
+          <MyHeader userId={this.props.userId} />
           <div className='container'>
-            <button className='navbar-toggler' type='button' data-toggle='collapse' data-target="#Navbar">
-              <span className='navbar-toggler-icon'></span>
-            </button>
-            <a className='navbar-brand mr-auto' href='/'>Utilities</a>
-              <div className='collapse navbar-collapse' id='Navbar'>
-                <ul className='navbar-nav mr-auto'>
-                  <li className='nav-item'>
-                    <Link to="/" className="btn btn-link nav-link">
-                      Home
-                    </Link>
-                  </li>
-                  <li className='nav-item active'>
-                    <Link to="/tariffs" className="btn btn-link nav-link">
-                      Тарифы
-                    </Link>
-                  </li>
-                  <li className='nav-item'>
-                    <Link to="/categories" className="btn btn-link nav-link">
-                      Категории услуг
-                    </Link>
-                  </li>
-                  <li className='nav-item'>
-                    <Link to={`/users/${this.props.userId}`} className="btn btn-link nav-link">
-                      Жилье
-                    </Link>
-                  </li>
-                </ul>
-              </div>
+            <div className='row'>
+              <ol className="col-12 breadcrumb">
+                <li className="breadcrumb-item"><a href="/">Home</a></li>
+                <li className="breadcrumb-item active">Тарифы</li>
+              </ol>
           </div>
-        </nav>
-        <div className='container'>
-          <div className='row'>
-            <ol className="col-12 breadcrumb">
-              <li className="breadcrumb-item"><a href="/">Home</a></li>
-              <li className="breadcrumb-item active">Тарифы</li>
-            </ol>
+            <div>
+              <h3>Категория</h3>
+              <Select value={this.state.category} onChange={this.handleCategorySelected} options={this.categories}/>
+              <TariffTable />
+            </div>
           </div>
-          {formIs}
+          <Footer />
         </div>
-      </div>
-    );
+      );
+    }
   }
 }
 const mapDispatchToProps = dispatch => ({

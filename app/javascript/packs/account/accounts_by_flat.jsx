@@ -1,11 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Link } from "react-router-dom";
 import AccountForm from './account_form';
 import AccountTable from './account_table';
 import { connect } from "react-redux";
 import { postAccount, setValueCounter, fetchAccounts } from '../redux/ActionCreators';
 import { Loading } from '../loadingComponent';
+import MyHeader from '../../components/my_header';
+import Footer from '../../components/footer';
 
 class AccountsByFlat extends React.Component {
   componentDidMount(){
@@ -41,6 +42,7 @@ class AccountsByFlat extends React.Component {
       );
     }else return(
       <div>
+        <MyHeader userId={this.props.userId} />
         <div className='row'>
           <ol className="col-12 breadcrumb">
             <li><Link to="/" className="btn btn-link">Home</Link></li>
@@ -59,6 +61,7 @@ class AccountsByFlat extends React.Component {
         <Link to={`/flats/${this.props.flatId}/utilities`} className="btn btn-link">
           Услуги
         </Link>
+        <Footer />
       </div>
     );
   }

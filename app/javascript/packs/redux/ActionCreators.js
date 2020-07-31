@@ -1,6 +1,7 @@
 import * as ActionTypes from './actionTypes';
 
-export const baseUrl = 'http://127.0.0.1:3000/';
+// export const baseUrl = 'http://127.0.0.1:3000/';
+export const baseUrl = 'http://127.0.0.1:3001/';
 
 export const getCategory = (categoryId) => ({
   type: ActionTypes.GET_CATEGORY,
@@ -176,6 +177,7 @@ export const addCategories = (categories) => ({
   payload: categories
 });
 export const fetchFlats = (userId) => (dispatch) => {
+  dispatch(flatsLoading(true));
   return fetch(baseUrl + 'users/'+userId)
     .then(response => response.json())
     .then(data => dispatch(addFlats(data)));
@@ -189,5 +191,23 @@ export const flatsFailed = (errmess) => ({
 });
 export const addFlats = (data) => ({
   type: ActionTypes.ADD_FLATS,
+  payload: data
+});
+export const fetchPayments = (flatId, accountId) => dispatch => {
+  dispatch(paymentsLoading(true));
+
+  return fetch(baseUrl + 'flats/'+flatId+'/accounts/'+accountId)
+    .then(response => response.json())
+    .then(data => dispatch(addPayments(data)));
+};
+export const paymentsLoading = () => ({
+  type: ActionTypes.PAYMENTS_LOADING
+});
+export const paymentsFailed = (errmess) => ({
+  type: ActionTypes.PAYMENTS_FAILED,
+  payload: errmess
+});
+export const addPayments = (data) => ({
+  type: ActionTypes.ADD_PAYMENTS,
   payload: data
 });

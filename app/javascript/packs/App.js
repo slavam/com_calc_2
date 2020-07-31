@@ -5,6 +5,7 @@ import { ConfigureStore } from './redux/configureStore';
 import { BrowserRouter, Switch, Route, withRouter } from 'react-router-dom';
 import TariffsByCategory from './tariffs_by_category';
 import AccountsByFlat from './account/accounts_by_flat';
+import AccountShow from './account/account_show';
 import UtilitiesByFlat from './utilities_by_flat';
 import Home from "../components/Home";
 import Categories from "../components/Categories";
@@ -23,13 +24,14 @@ class App extends React.Component{
         <BrowserRouter>
           <Switch>
             <Route path="/" exact component={() => <Home userId={this.props.userId}/>} />
-            <Route path="/logout" exact component={() => <Home userId={this.props.userId}/>} />
-            <Route path="/login" exact component={() => <Home userId={this.props.userId}/>} />
+            {/*<Route path="/logout" exact component={() => <Home userId={this.props.userId}/>} />
+            <Route path="/login" exact component={() => <Home userId={this.props.userId}/>} />*/}
             <Route exact path='/users/:userId' component={() => <Flats userId={this.props.userId} />} />
-            <Route exact path='/categories' component={() => <Categories />} />
-            <Route exact path='/tariffs' component={() => <TariffsByCategory />} />
-            <Route path='/flats/:flatId/accounts' component={ AccountsByFlat } />
-            <Route path='/flats/:flatId/utilities' component={UtilitiesByFlat } />
+            <Route exact path='/categories' component={() => <Categories userId={this.props.userId} />} />
+            <Route exact path='/tariffs' component={() => <TariffsByCategory userId={this.props.userId}/>} />
+            <Route exact path='/flats/:flatId/accounts' component={AccountsByFlat} />
+            <Route path='/flats/:flatId/utilities' component={UtilitiesByFlat} />
+            <Route exact path='/flats/:flatId/accounts/:accountId' component={AccountShow} />
           </Switch>
         </BrowserRouter>
       </Provider>

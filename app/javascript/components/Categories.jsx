@@ -1,8 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import {connect} from 'react-redux';
 import { fetchCategories } from '../packs/redux/ActionCreators';
 import { Loading } from '../packs/loadingComponent';
+import Footer from './footer';
+import MyHeader from './my_header';
 
 class Categories extends React.Component {
   componentDidMount() {
@@ -22,9 +24,6 @@ class Categories extends React.Component {
               {category.is_counter ? <dt className="col-5">По счетчику</dt> : null}
               {category.is_variable_tariff ? <dt className="col-5">Переменный тариф</dt> : null}
             </dl>
-            {/*<Link to={`/categories/${category.id}`} className="btn custom-button">
-              Просмотреть
-    </Link>*/}
           </div>
         </div>
       </div>
@@ -47,7 +46,13 @@ class Categories extends React.Component {
       );
     }else return (
       <div className='container'>
-        <Link to="/" className="btn btn-link">Home</Link>
+        <MyHeader userId={this.props.userId} />
+        <div className='row'>
+          <ol className="col-12 breadcrumb">
+            <li className="breadcrumb-item"><a href="/">Home</a></li>
+            <li className="breadcrumb-item active">Категории услуг</li>
+          </ol>
+        </div>
         <div className='col-12'>
           <h2>Все категории</h2>
         </div>
@@ -58,6 +63,7 @@ class Categories extends React.Component {
             </div>
           </main>
         </div>
+        <Footer />
       </div>
     );
   }
@@ -70,4 +76,3 @@ const mapStateToProps = state => {
           isLoading: state.categories.isLoading};
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Categories);
-// export default Categories;

@@ -8,7 +8,9 @@ const initialState = {
   tariffLimits: [],
   flatId: 0,
   userId: 0,
-  total: 0
+  total: 0,
+  account: null,
+  payments: []
 };
 export const Accounts = (state = initialState, action) => {
   switch (action.type) {
@@ -25,6 +27,12 @@ export const Accounts = (state = initialState, action) => {
       newUtilityParams[action.utilityIndex].new_value_counter = action.valueCounter;
       newUtilityParams[action.utilityIndex].tariff = action.tariff;
       return { ...state, utilityParams: newUtilityParams};
+    case ActionTypes.PAYMENTS_LOADING:
+      return {...state, isLoading: true, errMes: null, account: [], payments: []};
+    case ActionTypes.PAYMENTS_FAILED:
+      return {...state, isLoading: false, errMes: action.payload, account: null, payments: []}
+    case ActionTypes.ADD_PAYMENTS:
+      return {...state, isLoading: false, errMes: null, account: action.payload.account, payments: action.payload.payments}
     default:
       return state;
   }

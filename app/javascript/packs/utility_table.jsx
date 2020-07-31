@@ -53,7 +53,6 @@ class UtilityTable extends React.Component {
             </div>
           </div>
         </div>
-        
       </div>
     );
   }
