@@ -41,7 +41,7 @@ class AccountShow extends React.Component{
             <li><Link to="/" className="btn btn-link">Home</Link></li>
             <li><Link to={`/users/${this.props.userId}`} className="btn btn-link">Жилье</Link></li>
             <li><Link to={`/flats/${this.props.flatId}/accounts`} className="btn btn-link">Счета</Link></li>
-            <li style={{marginTop:'7px'}}>Счет</li>
+            <li style={{marginTop:'7px'}} className="breadcrumb-item active">Счет</li>
           </ol>
         </div>
         <div className='row row-content'>

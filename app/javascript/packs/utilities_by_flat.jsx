@@ -37,7 +37,7 @@ class UtilitiesByFlat extends React.Component {
           <ol className="col-12 breadcrumb">
             <li><Link to="/" className="btn btn-link">Home</Link></li>
             <li><Link to={`/users/${this.props.userId}`} className="btn btn-link">Жилье</Link></li>
-            <li><Link to={`/flats/${this.props.flatId}/utilities`} className="btn btn-link">Услуги</Link></li>
+            <li style={{marginTop:'7px'}} className="breadcrumb-item active">Услуги</li>
           </ol>
         </div>
         <UtilityForm postUtility={this.props.postUtility} categories={this.props.categories} tariffs={this.props.tariffs} flatId={this.props.flatId}/>

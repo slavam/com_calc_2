@@ -13,16 +13,6 @@ class AccountsByFlat extends React.Component {
     const { flatId } = this.props.match.params;
     this.props.fetchAccounts(flatId);
   }
-  // handleDeleteAccount(accountId){
-  //   $.ajax({
-  //     type: 'DELETE',
-  //     url: "/flats/"+this.props.flatId+"/accounts/"+accountId
-  //   }).done(function(data){
-  //     this.setState({accounts: data.accounts});
-  //   }.bind(this))
-  //   .fail(function(res){});
-  // }
-  
   render() {
     if(this.props.isLoading){
       return(
@@ -46,8 +36,8 @@ class AccountsByFlat extends React.Component {
         <div className='row'>
           <ol className="col-12 breadcrumb">
             <li><Link to="/" className="btn btn-link">Home</Link></li>
-            <li><Link to={`/users/${this.props.userId}`} className="btn btn-link">Жилье</Link></li>
-            <li><Link to={`/flats/${this.props.flatId}/accounts`} className="btn btn-link">Счета</Link></li>
+            <li><Link to={`/users/${this.props.userId}`} className="btn btn-link breadcrumb-item">Жилье</Link></li>
+            <li style={{marginTop:'7px'}} className="breadcrumb-item active">Счета</li>
           </ol>
         </div>
         <AccountForm setValueCounter={this.props.setValueCounter} postAccount={this.props.postAccount} total={this.props.total} utilityParams={this.props.utilityParams} flatId={this.props.flatId} tariffLimits={this.props.tariffLimits} />

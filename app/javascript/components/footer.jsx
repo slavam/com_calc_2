@@ -8,12 +8,12 @@ const Footer = () =>(
           <h5>Ссылки</h5>
           <ul className='list-unstyled'>
             <li><a href='/'><span className="fa fa-home fa-lg"></span>Home</a></li>
-            <li><a href='#'>Categories</a></li>
-            <li><a href='#'>Tariffs</a></li>
+            {/* <li><a href='#'>Categories</a></li>
+            <li><a href='#'>Tariffs</a></li> */}
           </ul>
         </div>
         <div className='col-7 col-sm-5'>
-          <h5>Адрес</h5>
+          <h5>Контакты</h5>
           <address>
             г. Донецк
             ул. Любавина, дом 2
