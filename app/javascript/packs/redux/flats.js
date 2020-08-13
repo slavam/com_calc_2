@@ -14,6 +14,8 @@ export const Flats = (state = initialState, action) => {
       return {...state, isLoading: true, errMess: null, flats: [], user: null};
     case ActionTypes.FLATS_FAILED:
       return {...state, isLoading: false, errMess: action.payload};
+    case ActionTypes.ADD_FLAT:
+      return {...state, flats: state.flats.concat(action.payload)}
     default:
       return state;
   }

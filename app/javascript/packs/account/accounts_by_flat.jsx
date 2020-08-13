@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import AccountForm from './account_form';
 import AccountTable from './account_table';
 import { connect } from "react-redux";
-import { postAccount, setValueCounter, fetchAccounts } from '../redux/ActionCreators';
+import { removeAccount, postAccount, setValueCounter, fetchAccounts } from '../redux/ActionCreators';
 import { Loading } from '../loadingComponent';
 import MyHeader from '../../components/my_header';
 import Footer from '../../components/footer';
@@ -51,7 +51,7 @@ class AccountsByFlat extends React.Component {
           </ol>
         </div>
         <AccountForm setValueCounter={this.props.setValueCounter} postAccount={this.props.postAccount} total={this.props.total} utilityParams={this.props.utilityParams} flatId={this.props.flatId} tariffLimits={this.props.tariffLimits} />
-        <AccountTable />
+        <AccountTable removeAccount={this.props.removeAccount} fetchAccounts={this.props.fetchAccounts}/>
         <Link to="/" className="btn btn-link">
           Home
         </Link>
@@ -69,7 +69,8 @@ class AccountsByFlat extends React.Component {
 const mapDispatchToProps = dispatch => ({
   postAccount: (flatId, accountParams) => dispatch(postAccount(flatId, accountParams)),
   setValueCounter: (utilityIndex, valueCounter, tariff) => dispatch(setValueCounter(utilityIndex, valueCounter, tariff)),
-  fetchAccounts: (flatId) => dispatch(fetchAccounts(flatId))
+  fetchAccounts: (flatId) => dispatch(fetchAccounts(flatId)),
+  removeAccount: (flatId, accountId) => dispatch(removeAccount(flatId, accountId))  
 });
 const mapStateToProps = state => {
   return {

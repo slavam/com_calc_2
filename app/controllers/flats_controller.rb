@@ -1,4 +1,5 @@
 class FlatsController < ApplicationController
+  skip_before_action :verify_authenticity_token
   before_action :logged_in_user #, only: [:new, :create, :destroy]
   before_action :set_flat, only: [:show, :edit, :update, :destroy]
   
@@ -12,8 +13,14 @@ class FlatsController < ApplicationController
   def create
     @flat = current_user.flats.build(flat_params)
     if @flat.save
-      flash[:success] = "Жилье создано"
-      redirect_to current_user
+      render json: {flat: @flat}
+      # respond_to do |format|
+      #   format.html do
+      #     flash[:success] = "Жилье создано"
+      #     redirect_to current_user
+      #   end
+      #   format.json { render json: { flat: @flat, status: :ok } }
+      # end
     else
       render 'new'
     end
@@ -35,11 +42,13 @@ class FlatsController < ApplicationController
   end
   
   def destroy
-    @flat.destroy
-    respond_to do |format|
-      format.html { redirect_to flats_url, notice: 'Flat was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    @flat&.destroy
+    render json: {message: 'Жилье удалено'}
+    # @flat.destroy
+    # respond_to do |format|
+    #   format.html { redirect_to flats_url, notice: 'Flat was successfully destroyed.' }
+    #   format.json { head :no_content }
+    # end
   end
   
   private

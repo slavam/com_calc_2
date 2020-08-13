@@ -7,7 +7,7 @@ const Footer = () =>(
         <div className='col-3 offset-1 col-sm-2'>
           <h5>Ссылки</h5>
           <ul className='list-unstyled'>
-            <li><a href='#'><span className="fa fa-home fa-lg"></span>Home</a></li>
+            <li><a href='/'><span className="fa fa-home fa-lg"></span>Home</a></li>
             <li><a href='#'>Categories</a></li>
             <li><a href='#'>Tariffs</a></li>
           </ul>

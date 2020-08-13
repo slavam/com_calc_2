@@ -6,7 +6,20 @@ class AccountsController < ApplicationController
   def show
     respond_to do |format|
       format.json do
-        payments = @account.payments
+        ps = @account.payments
+        payments = []
+        ps.map{|p| 
+          payment = {}
+          payment['id'] = p.id
+          payment['utility_name'] = p.utility.display_name
+          payment['months_number'] = p.months_number
+          payment['amount'] = p.amount
+          payment['quantity'] = p.quantity
+          payment['is_counter'] = p.is_counter
+          payment['old_value_counter'] = p.old_value_counter
+          payment['new_value_counter'] = p.new_value_counter
+          payments << payment
+        }
         render json: {account: @account, payments: payments}
       end
       format.html
@@ -81,9 +94,11 @@ class AccountsController < ApplicationController
   end
 
   def destroy
-    @account.destroy
-    flash[:success] = "Счет удален"
-    redirect_to flat_accounts_path #json: {accounts: @flat.accounts.order(:id).reverse_order}
+    @account&.destroy
+    render json: {message: 'Счет удален'}
+    # @account.destroy
+    # flash[:success] = "Счет удален"
+    # redirect_to flat_accounts_path #json: {accounts: @flat.accounts.order(:id).reverse_order}
   end
 
   private

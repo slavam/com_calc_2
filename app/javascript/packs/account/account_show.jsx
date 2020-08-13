@@ -2,17 +2,11 @@ import React from 'react';
 import { fetchPayments } from '../redux/ActionCreators';
 import { connect } from "react-redux";
 import { Loading } from '../loadingComponent';
-// import MyHeader from '../components/my_header';
+import { Link } from "react-router-dom";
+import MyHeader from '../../components/my_header';
 import Footer from '../../components/footer';
 
 class AccountShow extends React.Component{
-  constructor(props) {
-    super(props);
-    const { accountId } = this.props.match.params;
-    // alert(accountId)
-    // this.props.fetchPayments(this.props.flatId, accountId); //this.props.account.id);
-    // this.handleAccountClick = this.handleAccountClick.bind(this);
-  }
   componentDidUpdate(){
     console.log('componentDidUpdate');
   }
@@ -23,7 +17,6 @@ class AccountShow extends React.Component{
   }
   render() {
     if(this.props.isLoading){
-      // alert('isLoading')
       return(
         <div className="container">
           <div className="row">
@@ -42,6 +35,15 @@ class AccountShow extends React.Component{
     }else {
     return(
       <div className='container'> 
+        <MyHeader userId={this.props.userId} />
+        <div className='row'>
+          <ol className="col-12 breadcrumb">
+            <li><Link to="/" className="btn btn-link">Home</Link></li>
+            <li><Link to={`/users/${this.props.userId}`} className="btn btn-link">Жилье</Link></li>
+            <li><Link to={`/flats/${this.props.flatId}/accounts`} className="btn btn-link">Счета</Link></li>
+            <li style={{marginTop:'7px'}}>Счет</li>
+          </ol>
+        </div>
         <div className='row row-content'>
           <div className='col-12'>
             {this.props.account ? <h3>Счет на оплату коммунальных услуг с {this.props.account.start_date} за {this.props.account.months_number} мес.</h3>:null}
@@ -60,31 +62,18 @@ class AccountShow extends React.Component{
                 <tbody>
                   {this.props.payments ? this.props.payments.map((p) => {
                     return <tr key={p.id}>
-                      <td>{p.utility_id}</td>
+                      <td>{p.utility_name}</td>
                       <td>{p.amount}</td>
-                      <td>{p.is_counter ? '' :  'мес.'}</td>
+                      <td>{p.is_counter ? '' :  p.months_number+' мес.'}</td>
                       {p.is_counter ? <td>{p.old_value_counter}</td> : null}
                       {p.is_counter ? <td>{p.new_value_counter}</td> : null}
                       {p.is_counter ? <td>{p.quantity}</td> : null}
-                  </tr>}): null}
-                        {/*
-                    let deleteLink = <input id={u.id} type="submit" value="Удалить" onClick={event => this.handleDeleteClick(event)}/>;
-                    var category;
-                    this.props.categories.some(cat => {category = cat; return cat.id == u.category_id;});
-                    var tariff;
-                    this.props.tariffs.some(tar => {tariff = tar; return tar.id == u.tariff_id;});
-
-                    return <tr key={u.id}>
-                        <td>{category.name}</td>
-                        <td>{category.is_variable_tariff ? 'Тариф зависит от количества' : tariff.value}</td>
-                        <td>{u.description}</td>
-                        <td>{category.is_counter ? 'Да':'Нет'}</td>
-                        <td>{category.is_counter ? u.start_value_counter : ''}</td>
-                        <td>{category.is_counter ? u.last_value_counter : ''}</td>
-                        <td>{deleteLink}</td>
-                      </tr>;
-                    })
-                  */}
+                    </tr>}) : null}
+                  {this.props.account ?
+                    <tr>
+                      <td><b>Итого</b></td>
+                      <td><b>{this.props.account.total}</b></td>
+                    </tr> : null}
                 </tbody>
               </table>
             </div>
@@ -104,7 +93,7 @@ const mapStateToProps = state => {
           isLoading: state.accounts.isLoading,
           errMes: state.accounts.errMes,
           account: state.accounts.account,
+          utilityParams: state.accounts.utilityParams,
           payments: state.accounts.payments}
   }
 export default connect(mapStateToProps, mapDispatchToProps)(AccountShow);
-// export default AccountShow;

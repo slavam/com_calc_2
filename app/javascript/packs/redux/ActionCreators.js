@@ -31,7 +31,7 @@ export const removeUtility = (flatId, utilityId) => dispatch => {
     error => {
       throw error;
     })
-  .then(dispatch(fetchUtilities(flatId)))
+  .then(alert('Услуга удалена'))
   .catch(error =>  { console.log('delete utilities', error.message); alert('Your utility could not be deleted\nError: '+error.message); });
 };
 export const postUtility = (flatId, utility) => dispatch => {
@@ -117,6 +117,35 @@ export const postAccount = (flatId, accountParams) => (dispatch) => {
   .then(response => dispatch(addAccount(response.account)))
   .catch(error =>  { console.log('post accounts', error.message); alert('Your account could not be posted\nError: '+error.message); });
 };
+export const addFlat = (flat) => ({
+  type: ActionTypes.ADD_FLAT,
+  payload: flat
+})
+export const postFlat = (flatParams) => dispatch => {
+  return fetch(baseUrl + 'flats/', {
+    method: "POST",
+    body: JSON.stringify({ flat: flatParams}),
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: "same-origin"
+  })
+  .then(response => {
+    if (response.ok) {
+      return response;
+    } else {
+      var error = new Error('Error ' + response.status + ': ' + response.statusText);
+      error.response = response;
+      throw error;
+    }
+  },
+  error => {
+    throw error;
+  })
+  .then(response => response.json())
+  .then(response => dispatch(addFlat(response.flat)))
+  .catch(error =>  { console.log('post flat', error.message); alert('Your flat could not be posted\nError: '+error.message); });
+}
 export const setValueCounter = (utilityIndex, valueCounter, tariff) => ({
   type: ActionTypes.SET_VALUE_COUNTER,
   utilityIndex: utilityIndex,
@@ -211,3 +240,49 @@ export const addPayments = (data) => ({
   type: ActionTypes.ADD_PAYMENTS,
   payload: data
 });
+export const removeFlat = (flatId) => dispatch => {
+  return fetch(baseUrl + 'flats/'+flatId, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: "same-origin"
+  })
+  .then(response => {
+      if (response.ok) {
+        return response;
+      } else {
+        var error = new Error('Error ' + response.status + ': ' + response.statusText);
+        error.response = response;
+        throw error;
+      }
+    },
+    error => {
+      throw error;
+    })
+  .then(alert('Жилье удалено с услугами и счетами'))
+  .catch(error =>  { console.log('delete flat', error.message); alert('Your flat could not be deleted\nError: '+error.message); });
+};
+export const removeAccount = (flatId, accountId) => dispatch => {
+  return fetch(baseUrl + 'flats/'+flatId+'/accounts/'+accountId, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: "same-origin"
+  })
+  .then(response => {
+      if (response.ok) {
+        return response;
+      } else {
+        var error = new Error('Error ' + response.status + ': ' + response.statusText);
+        error.response = response;
+        throw error;
+      }
+    },
+    error => {
+      throw error;
+    })
+  .then(alert('Счет удален'))
+  .catch(error =>  { console.log('delete account', error.message); alert('Your account could not be deleted\nError: '+error.message); });
+};

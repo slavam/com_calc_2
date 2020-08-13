@@ -1,13 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {connect} from 'react-redux';
-import { fetchFlats } from '../packs/redux/ActionCreators';
+import { fetchFlats, postFlat, removeFlat } from '../packs/redux/ActionCreators';
 import Footer from '../components/footer';
 import { Loading } from './loadingComponent';
 import MyHeader from '../components/my_header';
+import FlatForm from './flat_form';
 
 class Flats extends React.Component {
   componentDidMount() {
+    this.props.fetchFlats(this.props.userId);
+  }
+  handleDeleteClick(e) {
+    e.preventDefault();
+    if (!confirm("Жилье будет удалено с услугами и счетами. Удалить?"))
+      return;
+    this.props.removeFlat(e.target.id);
     this.props.fetchFlats(this.props.userId);
   }
   render() {
@@ -32,6 +40,7 @@ class Flats extends React.Component {
             <Link to={`/flats/${flat.id}/accounts`} className="btn btn-link">
               Счета
             </Link>
+            <input className='btn btn-primary' id={flat.id} type="submit" value="Удалить" onClick={event => this.handleDeleteClick(event)}/>
           </div>
         </div>
       </div>
@@ -53,7 +62,7 @@ class Flats extends React.Component {
         </div>
       );
     }else return (
-      <div>
+      <div className='container'>
         <MyHeader userId={this.props.userId} />
         <div className='row'>
           <ol className="col-12 breadcrumb">
@@ -70,7 +79,7 @@ class Flats extends React.Component {
               </div>
             </main>
           </div>
-          
+          <FlatForm postFlat={this.props.postFlat}/>
         </div>
         <Footer />
       </div>
@@ -78,7 +87,9 @@ class Flats extends React.Component {
   }
 }
 const mapDispatchToProps = dispatch => ({
-  fetchFlats: (userId) => dispatch(fetchFlats(userId))
+  fetchFlats: (userId) => dispatch(fetchFlats(userId)),
+  postFlat: (flatParams) => dispatch(postFlat(flatParams)),
+  removeFlat: (flatId) => dispatch(removeFlat(flatId))
 });
 const mapStateToProps = state => {
   return {flats: state.flats.flats, 

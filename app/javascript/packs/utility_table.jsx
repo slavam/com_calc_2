@@ -8,7 +8,10 @@ class UtilityTable extends React.Component {
   }
   handleDeleteClick(e) {
     e.preventDefault();
+    if (!confirm("Услуга будет удалена со всеми платежами по ней в счетах. Удалить?"))
+      return;
     this.props.removeUtility(this.props.flatId, e.target.id);
+    this.props.fetchUtilities(this.props.flatId);
   }
   render(){
     return(
