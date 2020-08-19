@@ -15,7 +15,8 @@ gem 'jquery-rails'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 gem 'haml'
-gem 'mysql2', '~> 0.3.11'
+# gem 'mysql2', '~> 0.3.11'
+gem 'pg', '~> 0.18'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
 # Use SCSS for stylesheets
