@@ -1,7 +1,8 @@
 import * as ActionTypes from './actionTypes';
 
 // export const baseUrl = 'http://127.0.0.1:3000/';
-export const baseUrl = 'http://127.0.0.1:3001/';
+export const baseUrl = 'https://com-calc-3.herokuapp.com/';
+// export const baseUrl = 'http://127.0.0.1:3001/';
 
 export const getCategory = (categoryId) => ({
   type: ActionTypes.GET_CATEGORY,
